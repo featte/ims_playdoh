@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Internal Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f8;
+      padding: 40px;
+    }
+  
+    h1 {
+      text-align: center;
+      margin-top: 2px;
+      margin-bottom: 40px;
+      font-size: 28px;
+      font-family: 'Lucida Sans', sans-serif;
+    }
+  
+    .button-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+  
+    .toggle-button,
+    .inner-toggle {
+      background-color: #0055aa;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      border: none;
+      transition: background-color 0.3s ease;
+    }
+  
+    .toggle-button:hover,
+    .inner-toggle:hover {
+      background-color: #007bff;
+    }
+  
+    .active-button {
+      background-color: red !important;
+    }
+  
+    .hidden-content {
+      display: none;
+      margin-top: 10px;
+      transition: all 0.3s ease;
+    }
+  
+    .sets-wrapper {
+      display: flex;
+      gap: 50px;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+    }
+  
+    .set {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .set-title {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+  
+    .links-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+  
+    .link-card {
+      background: white;
+      padding: 8px 10px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: all 0.3s ease;
+      width: 200px;
+    }
+  
+    .link-card:hover {
+      transform: scale(1.05);
+      background-color: #afeeac;
+    }
+
+    .dk-sub {
+  background-color: #0055aa;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.dk-sub:hover {
+  background-color: #007bff;
+}
+
+.dk-sub.active-button {
+  background-color: red !important;
+}
+  
+    a {
+      text-decoration: none;
+      color: #0015d7;
+      font-weight: bold;
+    }
+  
+    .section-title {
+      font-size: 20px;
+      margin: 20px 0 10px 0;
+      font-weight: bold;
+    }
+  
+    .content-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+  
+    .linux-command-content {
+      display: none;
+      margin-top: 10px;
+      padding: 10px;
+    }
+  
+    /* Inner Toggle Button Styling */
+    .inner-toggle {
+      background-color: #0055aa;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      border: none;
+      transition: background-color 0.3s ease;
+    }
+  
+    .inner-toggle:hover {
+      background-color: #007bff;
+    }
+  
+    .inner-toggle.active-button {
+      background-color: red !important;
+    }
+
+  @keyframes fadeInOut {
+    0% { opacity: 0.2; }
+    50% { opacity: 1; }
+    100% { opacity: 0.2; }
+}
+
+.animated-fade {
+  animation: fadeInOut 2s infinite;
+  display: inline-block;
+  cursor: help;
+}
+
+.datetime-display {
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.hover-reveal {
+  position: fixed;
+  bottom: 10px;
+  right: 20px;
+  font-size: 14px;
+  font-family: 'Courier New', Courier, monospace;
+  color: rgb(0, 0, 0);
+}
+
+.hover-reveal .hidden-text {
+  color: transparent;
+  transition: color 0.3s ease;
+  cursor: pointer;
+}
+
+.hover-reveal:hover .hidden-text {
+  color: black;
+}
+
+
+
+  </style>
+</head>
+<body>
+
+<h1>🛝 IMS Playdoh</h1>
+
+<!-- Toggle Buttons -->
+<div class="button-container">
+  <button class="toggle-button" onclick="toggleSection('prod', this)">PROD login page</button>
+  <button class="toggle-button" onclick="toggleSection('uat', this)">UAT login page</button>
+  <button class="toggle-button" onclick="toggleSection('linux', this)">Linux Command</button>
+  <button class="toggle-button" onclick="toggleSection('note', this)">Notepage</button>
+ <!-- <button class="toggle-button" onclick="toggleSection('confluence', this)">Confluence page</button>
+  <button class="toggle-button" onclick="toggleSection('ansible', this)">Ansible</button>
+  <button class="toggle-button" onclick="toggleSection('elk', this)">OpenSearch/ELK</button>
+  <button class="toggle-button" onclick="toggleSection('github', this)">GitHub</button>
+  <button class="toggle-button" onclick="toggleSection('imap', this)">IMAP</button>  -->
+</div>
+
+
+
+<div id="prod" class="hidden-content">
+  <div class="section-title">PROD CMS login page</div>
+  <div class="sets-wrapper">
+    <!-- Set 1 -->
+    <div class="set">
+      <div class="set-title">Set 1</div>
+      <div class="links-container">
+        <div class="link-card" title="app1(C,D)"><a href="https://imsabmbmy.infinitium.com/IMS2ABMBMYCMS/login" target="_blank">ABMBMY</a></div>
+        <div class="link-card" title="app1(C,D)"><a href="https://imsaffinmy.infinitium.com/IMS2AFFINMYCMS/login" target="_blank">AFFINMY</a></div>
+        <div class="link-card" title="app1(I,J)"><a href="https://imsmbfmy.infinitium.com/IMS2AMBANKMYCMS/login" target="_blank">AMBANKMY</a></div>
+        <div class="link-card" title="app1(C,D)"><a href="https://imsbsnmy.infinitium.com/IMS2BSNMYCMS/login" target="_blank">BSNMY</a></div>
+        <div class="link-card" title="app1(C,D)"><a href="https://imsmbsbmy.infinitium.com/IMS2MBSBMYCMS/login" target="_blank">MBSBMY</a></div>
+        <div class="link-card" title="app1(C,D)"><a href="https://imsrhbmy.infinitium.com/IMS2RHBMYCMS/login" target="_blank">RHBMY</a></div>
+      </div>
+    </div>
+  
+    <!-- Set 2 -->
+    <div class="set">
+      <div class="set-title">Set 2</div>
+      <div class="links-container">
+        <div class="link-card" title="app2(C,D)"><a href="https://imsaeoncreditmy.infinitium.com/IMS2AEONCREDITMYCMS/login" target="_blank">AEONCREDITMY</a></div>
+        <div class="link-card" title="app2(C,D)"><a href="https://imsagromy.infinitium.com/IMS2AGROMYCMS/login" target="_blank">AGROMY</a></div>
+        <div class="link-card" title="app2(C,D)"><a href="https://imsbimy.infinitium.com/IMS2BIMYCMS/login" target="_blank">BIMY</a></div>
+        <div class="link-card" title="app2(C,D)"><a href="https://imsbkrmmy.infinitium.com/IMS2BKRMMYCMS/login" target="_blank">BKRMMY</a></div>
+        <div class="link-card" title="app2(C,D)"><a href="https://imshlbmy.infinitium.com/IMS2HLBMYCMS/login" target="_blank">HLBMY</a></div>
+        <div class="link-card" title="app2(C,D)"><a href="https://imsscbmy.infinitium.com/IMS2SCBMYCMS/login" target="_blank">SCBMY</a></div>
+        <div class="link-card" title="app2(C,D)"><a href="https://imsbibd.infinitium.com/IMS2BIBDCMS/login" target="_blank">BIBD</a></div>
+        <div class="link-card" title="app2(C,D)"><a href="https://imsmabmm.infinitium.com/IMS2MABMMCMS/loginn" target="_blank">MABMM</a></div>
+      </div>
+    </div>
+  
+    <!-- Set 3 -->
+    <div class="set">
+      <div class="set-title">Set 3</div>
+      <div class="links-container">
+        <div class="link-card" title="app3(C,D) = CMS&#10;app3(C,D,E,F) = ACS"><a href="https://imscimbmy.infinitium.com/IMS2CIMBMYCMS/login" target="_blank">CIMBMY</a></div>
+        <div class="link-card" title="app3(C,D)"><a href="https://imscimbsg.infinitium.com/IMS2CIMBSGCMS/login" target="_blank">CIMBSG</a></div>
+      </div>
+    </div>
+  
+    <!-- Set 4 -->
+    <div class="set">
+      <div class="set-title">Set 4</div>
+      <div class="links-container">
+        <div class="link-card" title="app4(C,D)"><a href="https://imslbph.infinitium.com/IMS2LBPHCMS/login" target="_blank">LBPH</a></div>
+        <div class="link-card" title="app4(C,D)"><a href="https://imsrhbkh.infinitium.com/IMS2RHBKHCMS/login" target="_blank">RHBKH</a></div>
+        <div class="link-card" title="app4(C,D)"><a href="https://imsubank.infinitium.com/IMS2UBANKPKCMS/login" target="_blank">UBANKPK</a></div>
+      </div>
+    </div>
+
+    <!-- Set SG -->
+    <div class="set">
+      <div class="set-title">SG</div>
+      <div class="links-container">
+        <div class="link-card" title="app1(C,D)"><a href="https://imsmbbsg.infinitium.com/IMS2MBBSGCMS/login" target="_blank">MBBSG</a></div>
+        <div class="link-card" title="app1(C,D)"><a href="https://imsocbcsg.infinitium.com/IMS2OCBCSGCMS/login" target="_blank">OCBCSG</a></div>
+        <div class="link-card" title="app1(C,D)"><a href="https://imsocbcmy.infinitium.com/IMS2OCBCMYCMS/login" target="_blank">OCBCMY</a></div>
+      </div>
+    </div>
+  </div> <!-- close sets-wrapper -->
+</div> <!-- close #prod -->
+
+
+
+<div id="uat" class="hidden-content">
+  <div class="section-title">UAT login&sim</div>
+  <div class="sets-wrapper">
+    <!-- Set 1 -->
+    <div class="set">
+      <div class="set-title">appluna1 (161.46)</div>
+      <div class="links-container">
+        <div class="link-card">
+          <a href="#" onclick="openMultipleTabs([
+            'https://uatabmbmy.infinitiumsolutions.com/IMS2ABMBMYCMS/login',
+            'https://3dsecureabmbmyuat.infinitiumsolutions.com/IMS2ABMBMYACS/api/3d2/simulator/'
+          ])">uatABMBMY</a>
+        </div>
+        <div class="link-card">
+          <a href="#" onclick="openMultipleTabs([
+            'https://uataffinmy.infinitiumsolutions.com/IMS2AFFINMYCMS/login',
+            'https://3dsecureaffinmyuat.infinitiumsolutions.com/IMS2AFFINMYACS/api/3d2/simulator/'
+          ])">uatAFFINMY</a>
+        </div>
+        <div class="link-card">
+          <a href="#" onclick="openMultipleTabs([
+            'https://uatmbfmy.infinitiumsolutions.com/IMS2AMBANKMYCMS/login',
+            'https://3dsecurembfmyuat.infinitiumsolutions.com/IMS2AMBANKMYACS/api/3d2/simulator/'
+          ])">uatAMBANKMY</a>
+        </div>
+        <div class="link-card">
+          <a href="#" onclick="openMultipleTabs([
+            'https://uatbsnmy.infinitiumsolutions.com/IMS2BSNMYCMS/login',
+            'https://3dsecurebsnmyuat.infinitiumsolutions.com/IMS2BSNMYACS/api/3d2/simulator/'
+          ])">uatBSNMY</a>
+        </div>
+        <div class="link-card">
+          <a href="#" onclick="openMultipleTabs([
+            'https://uatmbsbmy.infinitiumsolutions.com/IMS2MBSBMYCMS/login',
+            'https://3dsecurembsbmyuat.infinitiumsolutions.com/IMS2MBSBMYACS/api/3d2/simulator/'
+          ])">uatMBSBMY</a>
+        </div>
+        <div class="link-card">
+          <a href="#" onclick="openMultipleTabs([
+            'https://uatrhbmy.infinitiumsolutions.com/IMS2RHBMYCMS/login',
+            'https://3dsecurerhbmyuat.infinitiumsolutions.com/IMS2RHBMYACS/api/3d2/simulator/'
+          ])">uatRHBMY</a>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Set 2 -->
+    <div class="set">
+      <div class="set-title">appluna2 (161.5)</div>
+      <div class="links-container">
+        <div class="link-card">
+          <a href="#" onclick="openMultipleTabs([
+            'https://uataeoncreditmy.infinitiumsolutions.com/IMS2AEONCREDITMYCMS/login',
+            'https://3dsecureaeoncreditmyuat.infinitiumsolutions.com/IMS2AEONCREDITMYACS/api/3d2/simulator/'
+          ])">uatAEONCREDITMY</a>
+        </div>
+        <div class="link-card">
+          <a href="#" onclick="openMultipleTabs([
+            'https://uatagromy.infinitiumsolutions.com/IMS2AGROMYCMS/login',
+            'https://3dsecureagromyuat.infinitiumsolutions.com/IMS2AGROMYACS/api/3d2/simulator/'
+          ])">uatAGROMY</a>
+        </div>
+        <div class="link-card">
+          <a href="#" onclick="openMultipleTabs([
+            'https://uatbimy.infinitiumsolutions.com/IMS2BIMYCMS/login',
+            'https://3dsecurebimyuat.infinitiumsolutions.com/IMS2BIMYACS/api/3d2/simulator/'
+          ])">uatBIMY</a>
+        </div>
+        <div class="link-card">
+          <a href="#" onclick="openMultipleTabs([
+            'https://uatbkrmmy.infinitiumsolutions.com/IMS2BKRMMYCMS/login',
+            'https://3dsecurebkrmmyuat.infinitiumsolutions.com/IMS2BKRMMYACS/api/3d2/simulator/'
+          ])">uatBKRMMY</a>
+        </div>
+        <div class="link-card">
+          <a href="#" onclick="openMultipleTabs([
+            'https://uathlbmy.infinitiumsolutions.com/IMS2HLBMYCMS/login',
+            'https://3dsecurehlbmyuat.infinitiumsolutions.com/IMS2HLBMYACS/api/3d2/simulator/'
+          ])">uatHLBMY</a>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Set 4 -->
+    <div class="set">
+      <div class="set-title">appluna6 (161.26)</div>
+      <div class="links-container">
+        <div class="link-card">
+          <a href="#" onclick="openMultipleTabs([
+            'https://uatbibd.infinitiumsolutions.com/IMS2BIBDCMS/login',
+            'https://3dsecurebibduat.infinitiumsolutions.com/IMS2BIBDACS/api/3d2/simulator/'
+          ])">uatBIBD</a>
+        </div>
+        <div class="link-card">
+          <a href="#" onclick="openMultipleTabs([
+            'https://uatlbph.infinitiumsolutions.com/IMS2LBPHCMS/login',
+            'https://3dsecurelbphuat.infinitiumsolutions.com/IMS2LBPHACS/api/3d2/simulator/'
+          ])">uatLBPH</a>
+        </div>
+        <div class="link-card">
+            <a href="#" onclick="openMultipleTabs([
+              'https://uatmabmm.infinitiumsolutions.com/IMS2MABMMCMS/login',
+              'https://3dsecuremabmmuat.infinitiumsolutions.com/IMS2MABMMACS/api/3d2/simulator/'
+            ])">uatMABMM</a>
+        </div>
+        <div class="link-card">
+          <a href="#" onclick="openMultipleTabs([
+            'https://uatrhbkh.infinitiumsolutions.com/IMS2RHBKHCMS/login',
+            'https://3dsecurerhbkhuat.infinitiumsolutions.com/IMS2RHBKHACS/api/3d2/simulator/'
+          ])">uatRHBKH</a>
+        </div>
+        <div class="link-card">
+          <a href="#" onclick="openMultipleTabs([
+            'https://uatubank.infinitiumsolutions.com/IMS2UBANKPKCMS/login',
+            'https://3dsecureuatubank.infinitiumsolutions.com/IMS2UBANKPKACS/api/3d2/simulator/'
+          ])">uatUBANKPK</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Set  sg -->
+    <div class="set">
+      <div class="set-title">app8 (161.13)</div>
+      <div class="links-container">
+        <div class="link-card">
+          <a href="#" onclick="openMultipleTabs([
+            'https://uatmbbsg.infinitiumsolutions.com/IMS2MBBSGCMS/login',
+            'https://3dsecurembbsguat.infinitiumsolutions.com/IMS2MBBSGACS/api/3d2/simulator/'
+          ])">uatMBBSG</a>
+        </div>
+        <div class="link-card">
+          <a href="#" onclick="openMultipleTabs([
+            'https://uatocbcmy.infinitiumsolutions.com/IMS2OCBCMYCMS/login',
+            'https://3dsecureocbcmyuat.infinitiumsolutions.com/IMS2OCBCMYACS/api/3d2/simulator/'
+          ])">uatOCBCMY</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Set cimb  -->
+    <div class="set">
+      <div class="set-title">app9 (161.14)</div>
+      <div class="links-container">
+        <div class="link-card">
+          <a href="#" onclick="openMultipleTabs([
+            'https://uatcimb.infinitiumsolutions.com/IMS2CIMBMYCMS/login',
+            'https://uat-cimb-securee-pay.cimb.com/IMS2CIMBMYACS/api/3d2/simulator/'
+          ])">uatCIMBMY</a>
+        </div>
+        <div class="link-card">
+          <a href="#" onclick="openMultipleTabs([
+            'https://uatcimb.infinitiumsolutions.com/IMS2CIMBSGCMS/login',
+            'https://uat-cimb-securee-pay.cimb.com/IMS2CIMBSGACS/api/3d2/simulator/'
+          ])">uatCIMBSG</a>
+        </div>
+      </div>
+    </div>
+  </div> <!-- close sets-wrapper -->
+</div> <!-- close id #uat -->
+
+
+<div id="confluence" class="hidden-content">
+  <div class="section-title">Confluence Pages</div>
+  <div class="content-container">
+    <div class="link-card"><a href="#">Confluence Space</a></div>
+  </div>
+</div>
+
+
+<div id="linux" class="hidden-content">
+  <div class="section-title">Linux Command</div>
+
+  <!-- Inner toggle buttons -->
+  <div class="button-container">
+    <button class="toggle-button inner-toggle" onclick="toggleInner('basic', this)">Basic Command</button>
+    <button class="toggle-button inner-toggle" onclick="toggleInner('systemctl', this)">Systemctl Command</button>
+    <button class="toggle-button inner-toggle" onclick="toggleInner('podman', this)">Podman Command</button>
+  </div>
+
+  <!-- Basic Linux Commands -->
+  <div id="basic" class="linux-command-content hidden-content">
+    <div class="link-card" style="text-align: left; width: auto;">
+      <pre>
+<b>Command</b>                           <b>Functionality</b>
+---------------------------------------------------------
+ls                        List files and directories
+cd [dir]                  Change directory
+pwd                       Print current directory path
+mkdir [dir]               Create new directory
+rm [file]                 Delete file
+rm -r [dir]               Delete directory recursively
+cp [src] [dest]           Copy file or folder
+mv [src] [dest]           Move or rename files
+vi [file]                 Create a new empty file
+cat [file]                Show contents of a file
+nano [file]               Edit file with Nano editor
+chmod [perm] [file]       Change file permissions
+chown [user] [file]       Change file ownership
+df -h                     Show disk usage
+du -sh [dir]              Show space used by a directory
+top                       Show running processes
+ps aux                    List all processes
+kill [pid]                Kill a process by PID
+history                   Show command history
+clear                     Clear terminal screen
+ifconfig / ip a           Show IP addresses
+ping [host]               Check network connectivity
+whoami                    Show current user
+uptime                    Show system uptime
+      </pre>
+    </div>
+  </div>
+
+  <!-- Systemctl Commands -->
+  <div id="systemctl" class="linux-command-content hidden-content">
+    <div class="link-card" style="text-align: left; width: auto;">
+      <pre>
+<b>Command</b>                                                      <b>Functionality</b>
+-----------------------------------------------------------------------------------------
+systemctl status nginx                                Show status of nginx service
+systemctl start nginx                                 Start nginx service
+systemctl stop nginx                                  Stop nginx service
+systemctl restart nginx                               Restart nginx service
+systemctl enable nginx                                Enable service at boot
+systemctl disable nginx                               Disable service at boot
+systemctl is-active nginx                             Check if service is active
+systemctl is-enabled nginx                            Check if service is enabled
+systemctl list-units --type=service                   List active services
+systemctl list-units --type=service --state=running   List running services
+journalctl -u nginx                                   View logs for nginx service
+      </pre>
+    </div>
+  </div>
+
+  <!-- Podman Commands -->
+  <div id="podman" class="linux-command-content hidden-content">
+    <div class="link-card" style="text-align: left; width: auto;">
+      <pre>
+<b>Command</b>                                          <b>Functionality</b>
+--------------------------------------------------------------------
+podman ps                               Show running containers
+podman ps -a                            Show all containers
+podman start [container]                Start container
+podman stop [container]                 Stop container
+podman restart [container]              Restart container
+podman rm [container]                   Remove container
+podman rmi [image]                      Remove image
+podman images                           List images
+podman pull [image]                     Download image from registry
+podman run -it [image] /bin/bash        Run container interactively
+podman logs [container]                 Show container logs
+podman exec -it [container] /bin/bash   Exec into running container
+      </pre>
+    </div>
+  </div>
+</div>
+
+
+<div id="note" class="hidden-content">
+  <div class="section-title">Notepage</div>
+
+  <!-- First Layer Buttons -->
+  <div class="button-container">
+    <button class="inner-toggle" onclick="toggleInner('dkSftpSection', this)">DK sftp</button>
+    <button class="inner-toggle" onclick="toggleInner('uatCsrSection', this)">uat CSR</button>
+  </div>
+
+  <!-- DK SFTP Section -->
+  <div id="dkSftpSection" class="linux-command-content" style="display:none;">
+    <div class="section-title">SFTP enrolment</div>
+    <div class="button-container">
+      <button class="toggle-button dk-sub" onclick="toggleInner('dkExplanation', this)">explanation</button>
+      <button class="toggle-button dk-sub" onclick="toggleInner('dkPath', this)">path</button>
+    </div>
+
+    <!-- Explanation Content -->
+    <div id="dkExplanation" class="linux-command-content" style="display:none;">
+      <p>We're in the midst of migrating SFTP from Windows-based to Linux-based.</p>
+      <p><strong>Currently used SFTP servers in MY environment:</strong></p>
+      <ul>
+        <li><a href="http://dummynagiosalert.com" target="_blank">linux SFTP - cxinfsftp1a</a> - 192.168.60.19 - PROD</li>
+        <li><a href="http://dummynagiosalert.com" target="_blank">linux SFTP - svinfsftp1a</a> - 192.168.20.12 - DR</li>
+        <li><a href="http://dummynagiosalert.com" target="_blank">windows SFTP - myinfsftp1a</a> - 192.168.60.9 - PROD</li>
+        <li><a href="http://dummynagiosalert.com" target="_blank">windows SFTP - sginfsftp1a</a> - 192.168.111.111 - DR</li>
+      </ul>
+
+      <p>SFTP servers act as a <strong>transit server</strong>—banks send files to us or we fetch files from them.</p>
+      <p>
+        In INF_IMS2 terms:<br>
+        <strong class="animated-fade" title="Bank1&#10;Bank2&#10;Bank3">PUSH⬅️📦</strong> = where banks push files to our server<br>
+        <strong class="animated-fade" title="AEONCREDIT(ACSM)&#10;AFFIN&#10;AMBANK(MBF)&#10;BKRM&#10;HLB&#10;RHBMY&#10;RHBKH">PULL🪝</strong> = where we pull files from banks
+        <strong class="animated-fade" title="We download & upload files using scripts that resides on path /etc/sftp">ℹ️</strong>
+      </p>
+      
+    </div>
+
+    <!-- Path Content -->
+    <div id="dkPath" class="linux-command-content" style="display:none;">
+      <p><strong class="animated-fade" title="Where enrolment folders & files exist">cd /SECURE</strong></p>
+      <p><strong class="animated-fade" title="Path where bash_script files are placed">cd /etc/sftp</strong></p>
+      <p><strong class="animated-fade" title=".pem files are private keys of the pull_banks">cd /etc/ssh</strong></p>
+      <p><strong class="animated-fade" title="Logs for upload/download automation scripting">cd /var/log/sftp</strong></p>
+      <p><strong class="animated-fade" title="Edit cronjob">sudo crontab -e</strong></p>
+      <p><strong class="animated-fade" title="List & view cronjob">sudo crontab -l</strong></p>
+      <p><strong class="animated-fade" title="Telnet to pull_banks">sudo ./etc/sftp/telnet_pull_banks.sh</strong></p>
+    </div>
+  </div>
+
+
+  <!-- UAT CSR Section -->
+<div id="uatCsrSection" class="linux-command-content" style="display:none;">
+  <div class="section-title">UAT CSR</div>
+
+  <!-- Maintenance visuals -->
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <p style="font-weight: bold; color: #d35400; font-size: 16px;">🚧 Under maintenance – will add soon! 🚧</p>
+  </div>
+
+  <!-- Optional separator -->
+  <div style="margin-top: 10px;">
+    <img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2luenprcGg4eDdhbDJzMDhyOTdkMTlkbmNwYXE5NXg4cTdudDRhciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/VHOF8pfPZOt9p018zw/giphy.gif" alt="Under construction tape" width="100%">
+  </div>
+</div>
+
+
+</div>
+
+
+<!-- Add other sections similarly 
+<div id="ansible" class="hidden-content"><div class="section-title">Ansible</div></div>
+<div id="elk" class="hidden-content"><div class="section-title">OpenSearch/ELK</div></div>
+<div id="github" class="hidden-content"><div class="section-title">GitHub</div></div>
+<div id="imap" class="hidden-content"><div class="section-title">IMAP</div></div>  -->
+
+<div id="datetime" class="datetime-display"></div>
+
+<div class="hover-reveal">
+  <span class="hidden-text"> dinesh.K ©️ </span>
+</div>
+
+
+
+<script>
+  // Track current visible section
+  let currentVisible = null;
+
+  // Toggle outer sections (e.g., PROD, UAT, etc.)
+  function toggleSection(sectionId, button) {
+    const section = document.getElementById(sectionId);
+    if (!section) return;
+
+    const isVisible = section.style.display === 'block';
+
+    // Hide all outer sections (excluding nested linux-command-content)
+    document.querySelectorAll('.hidden-content').forEach(sec => {
+      if (!sec.classList.contains('linux-command-content')) {
+        sec.style.display = 'none';
+      }
+    });
+
+    // Reset outer buttons
+    document.querySelectorAll('.toggle-button').forEach(btn => btn.classList.remove('active-button'));
+
+    // Toggle section visibility
+    section.style.display = isVisible ? 'none' : 'block';
+    button.classList.toggle('active-button', !isVisible);
+    currentVisible = isVisible ? null : sectionId;
+
+    // Reset nested contents
+    const innerContents = document.querySelectorAll('.linux-command-content');
+    innerContents.forEach(content => content.style.display = 'none');
+
+    const innerButtons = document.querySelectorAll('.inner-toggle');
+    innerButtons.forEach(btn => btn.classList.remove('active-button'));
+  }
+
+  // Toggle inner sections (e.g., basic/systemctl/podman or DK explanation/path)
+  function toggleInner(innerId, button) {
+    const target = document.getElementById(innerId);
+    if (!target) return;
+
+    const parent = button.closest('.linux-command-content') || document.getElementById('note');
+    const innerContents = parent.querySelectorAll('.linux-command-content');
+    innerContents.forEach(content => content.style.display = 'none');
+
+    const innerButtons = parent.querySelectorAll('.inner-toggle');
+    innerButtons.forEach(btn => btn.classList.remove('active-button'));
+
+    const isVisible = target.style.display === 'block';
+    target.style.display = isVisible ? 'none' : 'block';
+    button.classList.toggle('active-button', !isVisible);
+  }
+
+  // Open multiple URLs in new browser tabs
+  function openMultipleTabs(urls) {
+    urls.forEach(url => {
+      window.open(url, '_blank');
+    });
+  }
+
+  function updateDateTime() {
+    const now = new Date();
+    const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+    const formatted = now.toLocaleDateString(undefined, options) + ' - ' + now.toLocaleTimeString();
+    document.getElementById('datetime').textContent = formatted;
+  }
+
+  setInterval(updateDateTime, 1000); // Update every second
+  updateDateTime(); // Initial run
+</script>
+
+
+
+
+
+
+</body>
+</html>

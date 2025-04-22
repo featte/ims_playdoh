@@ -475,13 +475,6 @@
 </div> <!-- close id #uat -->
 
 
-<div id="confluence" class="hidden-content">
-  <div class="section-title">Confluence Pages</div>
-  <div class="content-container">
-    <div class="link-card"><a href="#">Confluence Space</a></div>
-  </div>
-</div>
-
 
 <div id="linux" class="hidden-content">
   <div class="section-title">Linux Command</div>
@@ -491,6 +484,8 @@
     <button class="toggle-button inner-toggle" onclick="toggleInner('basic', this)">Basic Command</button>
     <button class="toggle-button inner-toggle" onclick="toggleInner('systemctl', this)">Systemctl Command</button>
     <button class="toggle-button inner-toggle" onclick="toggleInner('podman', this)">Podman Command</button>
+    <button class="toggle-button inner-toggle" onclick="toggleInner('cron', this)">Cron Expressions</button>
+    <button class="toggle-button inner-toggle" onclick="toggleInner('cronGenerator', this)">Cron Generator</button>
   </div>
 
   <!-- Basic Linux Commands -->
@@ -569,7 +564,69 @@ podman exec -it [container] /bin/bash   Exec into running container
       </pre>
     </div>
   </div>
+
+<!-- Cron Expression Help -->
+<div id="cron" class="linux-command-content hidden-content">
+  <div class="link-card" style="text-align: left; width: auto;">
+    <pre>
+<b>Cron Expression</b>                        <b>Meaning</b>
+------------------------------------------------------------------------------------------
+* * * * *                             Run every minute
+*/5 * * * *                           Run every 5 minutes
+0 * * * *                             Run at minute 0 (every hour)
+0 0 * * *                             Run daily at midnight
+0 8 * * *                             Run daily at 8:00 AM
+0 18 * * *                            Run daily at 6:00 PM
+0 0 * * 0                             Run every Sunday at midnight
+0 0 1 * *                             Run on the 1st day of every month at midnight
+0 0 1 1 *                             Run once a year on Jan 1st at midnight
+0 10,40 8,13,18 * *                   Run at 8:10, 8:40, 13:10, 13:40, 18:10, 18:40 daily
+0 */2 * * *                           Run every 2 hours
+0 0-6/2 * * *                         Run every 2 hours between 12AM and 6AM
+15 14 1 * *                           Run at 2:15 PM on the 1st of every month
+@reboot                               Run once at startup (system boot)
+@daily                                Same as 0 0 * * *
+@hourly                               Same as 0 * * * *
+    </pre>
+  </div>
 </div>
+
+<!-- Cron generator -->
+<div id="cronGenerator" class="linux-command-content hidden-content">
+  <div class="link-card" style="text-align: left; width: auto;">
+    <h3>Cron Expression Generator</h3>
+
+    <label>Minute:
+      <input type="text" id="cron-minute" value="0" placeholder="e.g. 0, */5">
+    </label><br><br>
+    <label>Hour:
+      <input type="text" id="cron-hour" value="*" placeholder="e.g. *, 0, 8, */2">
+    </label><br><br>
+    <label>Day of Month:
+      <input type="text" id="cron-dom" value="*" placeholder="1-31 or *">
+    </label><br><br>
+    <label>Month:
+      <input type="text" id="cron-month" value="*" placeholder="1-12 or *">
+    </label><br><br>
+    <label>Day of Week:
+      <input type="text" id="cron-dow" value="*" placeholder="0-6 (Sun=0)">
+    </label><br><br>
+
+    <button onclick="generateCron()">Generate</button>
+
+    <div style="margin-top: 15px;">
+      <b>Generated Cron Expression:</b><br>
+      <code id="cron-output" style="font-size: 16px; background: #f0f0f0; padding: 5px 10px; display: inline-block;"></code>
+    </div>
+
+    <div style="margin-top: 10px;">
+      <b>Explanation:</b><br>
+      <div id="cron-explanation" style="color: #333;"></div>
+    </div>
+  </div>
+</div>
+
+</div> <!-- close id #linux -->
 
 
 <div id="note" class="hidden-content">
@@ -644,7 +701,8 @@ podman exec -it [container] /bin/bash   Exec into running container
 </div>
 
 
-</div>
+</div><!-- close id #note -->
+
 
 
 <!-- Add other sections similarly 
@@ -728,6 +786,39 @@ podman exec -it [container] /bin/bash   Exec into running container
 
   setInterval(updateDateTime, 1000); // Update every second
   updateDateTime(); // Initial run
+
+
+  // cron generator ui start
+  function generateCron() {
+  const minute = document.getElementById('cron-minute').value.trim();
+  const hour = document.getElementById('cron-hour').value.trim();
+  const dom = document.getElementById('cron-dom').value.trim();
+  const month = document.getElementById('cron-month').value.trim();
+  const dow = document.getElementById('cron-dow').value.trim();
+
+  const cron = `${minute} ${hour} ${dom} ${month} ${dow}`;
+  document.getElementById('cron-output').innerText = cron;
+
+  // Basic human-readable explanation
+  let explanation = "";
+
+  explanation += `→ Every <b>${minute}</b> minute(s) `;
+  explanation += `at hour <b>${hour}</b>, `;
+  explanation += `on day <b>${dom}</b> of the month, `;
+  explanation += `month <b>${month}</b>, `;
+  explanation += `and on weekday(s) <b>${dow}</b>.`;
+
+  // Improve readability for common wildcards
+  explanation = explanation
+    .replace("Every <b>*</b> minute(s)", "→ Every minute")
+    .replace("at hour <b>*</b>", "every hour")
+    .replace("on day <b>*</b> of the month", "every day")
+    .replace("month <b>*</b>", "every month")
+    .replace("on weekday(s) <b>*</b>", "every day of the week");
+
+  document.getElementById("cron-explanation").innerHTML = explanation;
+}
+// cron generator ui end
 </script>
 
 

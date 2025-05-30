@@ -214,6 +214,7 @@
   <button class="toggle-button" onclick="toggleSection('elk', this)">OpenSearch/ELK</button>
   <button class="toggle-button" onclick="toggleSection('imap', this)">IMAP</button>
   <button class="toggle-button" onclick="toggleSection('report', this)">Reports</button>
+  <button class="toggle-button" onclick="toggleSection('qa', this)">Queries</button>
   <!-- <button class="toggle-button" onclick="toggleSection('confluence', this)">Confluence page</button>
   <button class="toggle-button" onclick="toggleSection('elk', this)">OpenSearch/ELK</button>
   <button class="toggle-button" onclick="toggleSection('github', this)">GitHub</button>
@@ -326,7 +327,7 @@
     <div class="set">
      <div class="set-title">UAT auto-patching</div> 
       <div class="links-container">
-        <div class="link-card" title="guide on confluence&#10; do auto-patch thru Jira tix&#10; monitor job on Ansible-awx">
+        <div class="link-card" title="Link1-guide on confluence&#10; Link2-do auto-patch thru Jira tix&#10; Link3-monitor job on Ansible-awx">
           <a href="#" onclick="openMultipleTabs([
             'https://infinitium.atlassian.net/wiki/spaces/IssuerTeam/pages/1151172772/Patching+OTP+Template',
             'https://infinitium.atlassian.net/browse/IMSTEAM-2070',
@@ -418,7 +419,28 @@
   </div> <!-- close sets-wrapper -->
 </div> <!-- close #prod -->
 
+<!-- QA links -->
+    <div id="qa" class="hidden-content" style="display:none;">
+      <p>click link to navigate to solutions. <strong>***adjust queries if needed***</strong></p>
+       <h2>Queries</h2>
 
+  <!-- QA Queries Section -->
+  <div class="elk-section">
+    <h3>UAT_queries</h3>
+    <ul>
+      <li><a href="https://teams.microsoft.com/l/message/19:0706011bc3c548b498dbedf873bd1233@thread.v2/1748579849711?context=%7B%22contextType%22%3A%22chat%22%7D" target="_blank">trxn exception</a> - error [Signing info not found for key visa]</li>
+    </ul>
+  </div>
+
+  <!-- Prod Issues Section -->
+  <div class="elk-section">
+    <h3>Prod Issues</h3>
+    <ul>
+      <li><a href="https://teams.microsoft.com/l/message/19:0706011bc3c548b498dbedf873bd1233@thread.v2/1744683332224?context=%7B%22contextType%22%3A%22chat%22%7D" target="_blank">retrieve backdated data from prod database.</a> - When Bank required us to retrieve backdated data from prod database </li>
+    </ul>
+  </div>
+      
+    </div> <!-- close #QA -->
 
 <div id="uat" class="hidden-content">
   <div class="section-title">UAT login&sim</div>

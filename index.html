@@ -645,6 +645,7 @@
     <button class="toggle-button inner-toggle" onclick="toggleInner('podman', this)">Podman Command</button>
     <button class="toggle-button inner-toggle" onclick="toggleInner('cron', this)">Cron Expressions</button>
     <button class="toggle-button inner-toggle" onclick="toggleInner('cronGenerator', this)">Cron Generator</button>
+    <button class="toggle-button inner-toggle" onclick="toggleInner('http-errors', this)">HTTP Errors</button>
   </div>
 
   <!-- Basic Linux Commands -->
@@ -724,6 +725,57 @@ podman exec -it [container] /bin/bash   Exec into running container
       </pre>
     </div>
   </div>
+
+  <!-- HTTP Error Codes -->
+<div id="http-errors" class="linux-command-content hidden-content">
+  <div class="link-card" style="text-align: left; width: auto;">
+    <pre>
+<b>Status Code</b>                   <b>Description</b>
+---------------------------------------------------------------
+<b>1xx: Informational</b>
+100 Continue              Server received initial request, continue sending
+101 Switching Protocols   Server accepts protocol switch
+102 Processing            Server is processing but no response yet
+
+<b>2xx: Success</b>
+200 OK                    Request successful
+201 Created               Resource successfully created
+202 Accepted              Request accepted but not completed
+204 No Content            Successful, no content to return
+
+<b>3xx: Redirection</b>
+301 Moved Permanently     Resource moved permanently
+302 Found                 Resource temporarily at different URL
+304 Not Modified          Resource not changed since last request
+307 Temporary Redirect    Temporary redirection, same method
+308 Permanent Redirect    Permanent redirection, same method
+
+<b>4xx: Client Errors</b>
+400 Bad Request           Malformed request
+401 Unauthorized          Authentication required
+403 Forbidden             Request understood, not authorized
+404 Not Found             Resource not found
+405 Method Not Allowed    Method not allowed for resource
+408 Request Timeout       Server timed out waiting for request
+409 Conflict              Conflict in request (e.g., duplicate)
+410 Gone                  Resource permanently removed
+413 Payload Too Large     Request size too large
+414 URI Too Long          URI too long
+429 Too Many Requests     Rate limiting in effect
+
+<b>5xx: Server Errors</b>
+500 Internal Server Error Generic server error
+501 Not Implemented       Server lacks capability to fulfill
+502 Bad Gateway           Invalid response from upstream server
+503 Service Unavailable   Server overloaded or under maintenance
+504 Gateway Timeout       Upstream server timed out
+505 HTTP Version Not Supported HTTP version not supported
+507 Insufficient Storage  Server cannot store required data
+511 Network Authentication Required Authentication to access network needed
+    </pre>
+  </div>
+</div>
+
 
 <!-- Cron Expression Help -->
 <div id="cron" class="linux-command-content hidden-content">

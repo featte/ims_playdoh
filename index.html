@@ -249,7 +249,10 @@
     <div id="elk" class="hidden-content" style="display:none;">
       <p>click link to navigate to opensearch page. <strong>***adjust queries if needed***</strong></p>
       <ul>
-        <li><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/dashboards#/view/93a827f0-9110-11ef-8ba2-e5fb86697e45?_g=(filters:!(),refreshInterval:(pause:!f,value:30000),time:(from:now-5m,to:now))&_a=(description:'',filters:!(),fullScreenMode:!f,options:(hidePanelTitles:!f,useMargins:!t),query:(language:kuery,query:''),timeRestore:!f,title:'RBA%20on%20TM%20and%20FDS',viewMode:view)" target="_blank">FDS dashboard</a> - to check fds i guess🤷🏽‍♂️</li>
+        <li><a href="#" onclick="openMultipleTabs([
+          'https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/dashboards#/view/93a827f0-9110-11ef-8ba2-e5fb86697e45?_g=(filters:!(),refreshInterval:(pause:!f,value:30000),time:(from:now-5m,to:now))&_a=(description:'',filters:!(),fullScreenMode:!f,options:(hidePanelTitles:!f,useMargins:!t),query:(language:kuery,query:''),timeRestore:!f,title:'RBA%20on%20TM%20and%20FDS',viewMode:view)',
+          'https://103.135.43.78/nagios/cgi-bin/extinfo.cgi?type=2&host=cxinfelk3.infinitium.com&service=check_fds_request'
+        ])">FDS dashboard</a> - to check fds i guess🤷🏽‍♂️</li>
         <li><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!f,value:30000),time:(from:now%2Fd,to:now%2Fd))&_a=(columns:!(host.hostname,remain_message,tags,transactionID),filters:!(),index:'6cbd7240-4af2-11ee-8ba2-e5fb86697e45',interval:auto,query:(language:kuery,query:'remain_message:%20exception%20and%20tags:%20ims2cimbmy'),sort:!())" target="_blank">exception</a> - to check exception from app server log </li>
         <li><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!f,value:5000),time:(from:now%2Fd,to:now%2Fd))&_a=(columns:!(remain_message,log.file.path,host.name),filters:!(),index:'6cbd7240-4af2-11ee-8ba2-e5fb86697e45',interval:auto,query:(language:kuery,query:'tags.keyword%20:%20%22ims2bkrmmy%22%20and%20remain_message%20:%20*JDBC*'),sort:!())" target="_blank">check db connection(JDBC)</a> - to check database connection</li>
         <li><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!f,value:5000),time:(from:now-4d,to:now))&_a=(columns:!(remain_message,log.file.path,host.name),filters:!(),index:'6cbd7240-4af2-11ee-8ba2-e5fb86697e45',interval:auto,query:(language:kuery,query:'tags.keyword%20:%20%22ims2affinmy%22%20and%20remain_message%20:%20*QuartzEnrollmentJob*%0A'),sort:!())" target="_blank">enrolment cronjob</a> - to monitor enrolment cronjob status</li>
@@ -669,7 +672,8 @@ scp /path/to/localfile username@remote_host:/path/to/remotefile       To secur
 chmod [perm] [file]                                                   Change file permissions
 chown [user] [file]                                                   Change file ownership
 df -h                                                                 Show disk usage
-du -sh [dir]                                                          Show space used by a directory
+du -sh [dir]                                                          Show space used by a directory    [ eg: du -sh /logdrive ]
+du -sh [dir] | sort -htr                                              Show space used by a directory sort highest at bottom    [ eg: du -sh /logdrive ] 
 top                                                                   Show running processes
 ps aux                                                                List all processes
 kill [pid]                                                            Kill a process by PID

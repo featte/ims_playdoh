@@ -196,6 +196,22 @@
 }
 
 
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-family: Arial, sans-serif;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    text-align: left;
+    padding: 8px;
+  }
+  th {
+    background-color: #f4f4f4;
+  }
+
+
+
 
   </style>
 </head>
@@ -207,7 +223,7 @@
 <div class="button-container">
   <button class="toggle-button" onclick="toggleSection('prod', this)">PROD login page</button>
   <button class="toggle-button" onclick="toggleSection('uat', this)">UAT login page</button>
-  <button class="toggle-button" onclick="toggleSection('linux', this)">Linux Command</button>
+  <button class="toggle-button" onclick="toggleSection('linux', this)">Codes & Command</button>
   <button class="toggle-button" onclick="toggleSection('note', this)">Notepage</button>
   <button class="toggle-button" onclick="toggleSection('cmb', this)">CMB</button>
   <button class="toggle-button" onclick="toggleSection('ansible', this)">DevOps</button>
@@ -653,6 +669,7 @@
     <button class="toggle-button inner-toggle" onclick="toggleInner('cron', this)">Cron Expressions</button>
     <button class="toggle-button inner-toggle" onclick="toggleInner('cronGenerator', this)">Cron Generator</button>
     <button class="toggle-button inner-toggle" onclick="toggleInner('http-errors', this)">HTTP Errors</button>
+    <button class="toggle-button inner-toggle" onclick="toggleInner('currency-code', this)">CurrencyCodes w NumericValues</button>
   </div>
 
   <!-- Basic Linux Commands -->
@@ -786,6 +803,44 @@ podman exec -it [container] /bin/bash   Exec into running container
   </div>
 </div>
 
+<!-- currency Codes -->
+<div id="currency-code" class="linux-command-content hidden-content">
+  <div class="link-card" style="text-align: left; width: auto;">
+    <table border="1" cellpadding="8" cellspacing="0">
+      <thead>
+        <tr>
+          <th>Country / Region</th>
+          <th>Currency Name</th>
+          <th>Code</th>
+          <th>Numeric</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>🇲🇾 Malaysia</td><td>Malaysian Ringgit</td><td>MYR</td><td>458</td></tr>
+        <tr><td>🇸🇬 Singapore</td><td>Singapore Dollar</td><td>SGD</td><td>702</td></tr>
+        <tr><td>🇺🇸 United States</td><td>US Dollar</td><td>USD</td><td>840</td></tr>
+        <tr><td>🇪🇺 Eurozone</td><td>Euro</td><td>EUR</td><td>978</td></tr>
+        <tr><td>🇬🇧 United Kingdom</td><td>Pound Sterling</td><td>GBP</td><td>826</td></tr>
+        <tr><td>🇯🇵 Japan</td><td>Japanese Yen</td><td>JPY</td><td>392</td></tr>
+        <tr><td>🇨🇳 China</td><td>Yuan Renminbi</td><td>CNY</td><td>156</td></tr>
+        <tr><td>🇨🇭 Switzerland</td><td>Swiss Franc</td><td>CHF</td><td>756</td></tr>
+        <tr><td>🇨🇦 Canada</td><td>Canadian Dollar</td><td>CAD</td><td>124</td></tr>
+        <tr><td>🇦🇺 Australia</td><td>Australian Dollar</td><td>AUD</td><td>036</td></tr>
+        <tr><td>🇭🇰 Hong Kong</td><td>Hong Kong Dollar</td><td>HKD</td><td>344</td></tr>
+        <tr><td>🇮🇳 India</td><td>Indian Rupee</td><td>INR</td><td>356</td></tr>
+        <tr><td>🇰🇷 South Korea</td><td>South Korean Won</td><td>KRW</td><td>410</td></tr>
+        <tr><td>🇸🇦 Saudi Arabia</td><td>Saudi Riyal</td><td>SAR</td><td>682</td></tr>
+        <tr><td>🇦🇪 UAE</td><td>UAE Dirham</td><td>AED</td><td>784</td></tr>
+        <tr><td>🇹🇭 Thailand</td><td>Thai Baht</td><td>THB</td><td>764</td></tr>
+        <tr><td>🇵🇭 Philippines</td><td>Philippine Peso</td><td>PHP</td><td>608</td></tr>
+        <tr><td>🇮🇩 Indonesia</td><td>Indonesian Rupiah</td><td>IDR</td><td>360</td></tr>
+        <tr><td>🇿🇦 South Africa</td><td>South African Rand</td><td>ZAR</td><td>710</td></tr>
+        <tr><td>🇧🇷 Brazil</td><td>Brazilian Real</td><td>BRL</td><td>986</td></tr>
+      </tbody>
+    </table>
+    
+  </div>
+</div>
 
 <!-- Cron Expression Help -->
 <div id="cron" class="linux-command-content hidden-content">

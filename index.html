@@ -248,15 +248,16 @@
     <div class="url-builder">
       <input type="text" id="hostInput" placeholder="Enter host (e.g. 3dsecure.bibd.com.bn)" style="width:300px; padding:5px;" />
       
-      <select id="portSelect" style="padding:5px;">
-        <option value="443">443</option>
-        <option value="9700">9700</option>
-        <option value="9701">9701</option>
-        <option value="9800">9800</option>
-      </select>
+     <select id="portSelect" style="padding:5px;">
+     <option value="443">443 - acs</option>
+     <option value="9700">9700 - visa</option>
+     <option value="9701">9701 - mastercard</option>
+     <option value="9800">9800 - mydebit</option>
+     </select>
       
       <button onclick="openCustomUrl()">Go</button>
     </div>
+    <div class="link-card" title="open w forticlient"><a href="https://devops.infinitiumsolutions.com/cert-management/cmverify.html" target="_blank">Prod_signed cert checker</a></div>
   </div>
 </div>
 

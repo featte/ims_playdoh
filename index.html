@@ -304,19 +304,31 @@
 
     <!-- Info Icon with Toggle Guide -->
     <div class="info-container">
-      <span class="info-icon" onclick="toggleGuide()">&#9432;</span>
-      <div id="certGuide" class="info-popup">
-        <strong>How to do: Cert renewal activity</strong><br><br>
-        • Comm out in WA group &amp; email 15/30 mins before actual activity starts<br>
-        • Inform ITSec to upload cert on their site (F5)<br>
-        • IMS can do cert renewal in PROD &amp; DR at the same time<br>
-        • Best practice: upload cert &amp; key to relevant directory before activity starts<br>
-        • After PROD cert renewal, monitor transaction<br>
-        • After PROD &amp; DR renewal, ask NOC to check cert on Nagios<br>
-        • If transaction good, inform WA group &amp; email with cert expiry + latest trx screenshot from CMS<br>
-        • Upload cert screenshot &amp; directory path in CMB ticket for post-review verification
-      </div>
-    </div>
+  <span class="info-icon" onclick="toggleGuide()">&#9432;</span>
+  <div id="certGuide" class="info-popup">
+    <strong>How to do: Cert Renewal Activity</strong><br><br>
+
+    <u>Pre-check</u><br>
+    • Email ITSec with attached ZIP (leaf, CA-ROOT, and key).<br>
+    • Best practice: upload cert &amp; key to the relevant directory before the actual activity starts (set up earlier makes life easier).<br><br>
+
+    <u>30 mins before actual activity</u><br>
+    • Communicate in WA group &amp; send email 15–30 minutes before start.<br>
+    • Inform ITSec to upload cert on their site (F5) — give them a heads-up early.<br>
+    • IMS can do cert renewal in DR first.<br>
+    • Once ITSec finishes upload, proceed with cert renewal in PROD.<br><br>
+
+    <u>Activity end</u><br>
+    • Check new cert once ITSec uploads.<br>
+    • After PROD cert renewal, monitor transactions.<br>
+    • If transactions are good, inform WA group &amp; email with attached cert expiry + latest CMS transaction screenshot.<br><br>
+
+    <u>Post-check</u><br>
+    • Once PROD &amp; DR cert renewal is done, ask NOC to check the relevant cert on Nagios monitoring.<br>
+    • Upload cert screenshot &amp; its directory path in CMB ticket for post-review verification.<br>
+  </div>
+</div>
+
 
   </div>
 </div>

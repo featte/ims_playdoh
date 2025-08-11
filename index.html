@@ -209,7 +209,44 @@
   th {
     background-color: #f4f4f4;
   }
+/* Info icon */
+.info-container {
+  margin-top: 15px;
+  position: relative;
+  display: inline-block;
+}
 
+.info-icon {
+  font-size: 18px;
+  cursor: pointer;
+  background: #007BFF;
+  color: white;
+  border-radius: 50%;
+  padding: 3px 6px;
+  user-select: none;
+}
+
+.info-icon:hover {
+  background: #0056b3;
+}
+
+/* Popup balloon */
+.info-popup {
+  display: none;
+  position: absolute;
+  top: 30px;
+  left: 0;
+  width: 350px;
+  background: #f9f9f9;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 13px;
+  line-height: 1.4;
+  z-index: 100;
+  box-shadow: 0px 3px 6px rgba(0,0,0,0.15);
+}
 
 
 
@@ -240,25 +277,47 @@
 </div>
 
 <div id="cert" class="hidden-content">
-  <div class="section-title">Cert Viewer</div><br><br>
+  <div class="section-title">Cert Viewer</div>
+  <br><br>
+  
   <div class="sets-wrapper">
-    <!-- Your existing sets here -->
 
-    <!-- Add input + dropdown + button -->
+    <!-- Input + dropdown + button -->
     <div class="url-builder">
       <input type="text" id="hostInput" placeholder="Enter host (e.g. 3dsecure.bibd.com.bn)" style="width:300px; padding:5px;" />
-      
-     <select id="portSelect" style="padding:5px;">
-     <option value="443">443 - acs</option>
-     <option value="9700">9700 - visa</option>
-     <option value="9701">9701 - mastercard</option>
-     <option value="9800">9800 - mydebit</option>
-     </select>
-      
+      <select id="portSelect" style="padding:5px;">
+        <option value="443">443 - acs</option>
+        <option value="9700">9700 - visa</option>
+        <option value="9701">9701 - mastercard</option>
+        <option value="9800">9800 - mydebit</option>
+      </select>
       <button onclick="openCustomUrl()">Go</button>
     </div>
-    <div class="link-card" title="open w forticlient"><a href="https://devops.infinitiumsolutions.com/cert-management/cmverify.html" target="_blank">Prod_signed cert checker</a></div>
-            <div class="link-card" title="online page to decode csr content"><a href="https://certlogik.com/decoder/" target="_blank">CSR decoder</a></div>
+
+    <!-- Links -->
+    <div class="link-card" title="open w forticlient">
+      <a href="https://devops.infinitiumsolutions.com/cert-management/cmverify.html" target="_blank">Prod_signed cert checker</a>
+    </div>
+    <div class="link-card" title="online page to decode csr content">
+      <a href="https://certlogik.com/decoder/" target="_blank">CSR decoder</a>
+    </div>
+
+    <!-- Info Icon with Toggle Guide -->
+    <div class="info-container">
+      <span class="info-icon" onclick="toggleGuide()">&#9432;</span>
+      <div id="certGuide" class="info-popup">
+        <strong>How to do: Cert renewal activity</strong><br><br>
+        • Comm out in WA group &amp; email 15/30 mins before actual activity starts<br>
+        • Inform ITSec to upload cert on their site (F5)<br>
+        • IMS can do cert renewal in PROD &amp; DR at the same time<br>
+        • Best practice: upload cert &amp; key to relevant directory before activity starts<br>
+        • After PROD cert renewal, monitor transaction<br>
+        • After PROD &amp; DR renewal, ask NOC to check cert on Nagios<br>
+        • If transaction good, inform WA group &amp; email with cert expiry + latest trx screenshot from CMS<br>
+        • Upload cert screenshot &amp; directory path in CMB ticket for post-review verification
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -1099,6 +1158,12 @@ podman exec -it [container] /bin/bash   Exec into running container
 
   const url = `https://${host}:${port}/`;
   window.open(url, '_blank');
+}
+
+
+function toggleGuide() {
+  const popup = document.getElementById('certGuide');
+  popup.style.display = (popup.style.display === 'block') ? 'none' : 'block';
 }
 
   // Track current visible section

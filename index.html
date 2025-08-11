@@ -239,6 +239,28 @@
   <button class="toggle-button" onclick="toggleSection('imap', this)">IMAP</button>  -->
 </div>
 
+<div id="cert" class="hidden-content">
+  <div class="section-title">Reports</div><br><br>
+  <div class="sets-wrapper">
+    <!-- Your existing sets here -->
+
+    <!-- Add input + dropdown + button -->
+    <div class="url-builder">
+      <input type="text" id="hostInput" placeholder="Enter host (e.g. 3dsecure.bibd.com.bn)" style="width:300px; padding:5px;" />
+      
+      <select id="portSelect" style="padding:5px;">
+        <option value="443">443</option>
+        <option value="9700">9700</option>
+        <option value="9701">9701</option>
+        <option value="9800">9800</option>
+      </select>
+      
+      <button onclick="openCustomUrl()">Go</button>
+    </div>
+  </div>
+</div>
+
+
 <div id="report" class="hidden-content">
   <div class="section-title">Reports</div><br><br>
   <div class="sets-wrapper">
@@ -1063,6 +1085,20 @@ podman exec -it [container] /bin/bash   Exec into running container
 
 
 <script>
+
+  function openCustomUrl() {
+  const host = document.getElementById('hostInput').value.trim();
+  const port = document.getElementById('portSelect').value;
+
+  if (!host) {
+    alert('Please enter a host');
+    return;
+  }
+
+  const url = `https://${host}:${port}/`;
+  window.open(url, '_blank');
+}
+
   // Track current visible section
   let currentVisible = null;
 

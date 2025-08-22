@@ -270,6 +270,7 @@
   <button class="toggle-button" onclick="toggleSection('qa', this)">Queries</button>
   <button class="toggle-button" onclick="toggleSection('http', this)">HTTP error code</button>
   <button class="toggle-button" onclick="toggleSection('cert', this)">CERT Renewal Process</button>
+  <button class="toggle-button" onclick="toggleSection('tool', this)">Tools</button>
   <!-- <button class="toggle-button" onclick="toggleSection('confluence', this)">Confluence page</button>
   <button class="toggle-button" onclick="toggleSection('elk', this)">OpenSearch/ELK</button>
   <button class="toggle-button" onclick="toggleSection('github', this)">GitHub</button>
@@ -338,6 +339,27 @@
 
   </div>
 </div>
+
+<div id="tool" class="hidden-content">
+  <div class="section-title">Tools<span style='font-size:40px;'>&#129520;</span></div><br><br>
+  <div class="sets-wrapper">
+    <!-- Set 1 -->
+    <div class="set">
+      <div class="links-container">
+        <div class="link-card" title="online page to decode csr content"><a href="https://certlogik.com/decoder/" target="_blank">CSR decoder</a></div>
+      </div>
+    </div>
+      <!-- end Set 1 -->
+
+   <!-- Set 2 -->
+    <div class="set">
+      <div class="links-container">
+        <div class="link-card" title="generating and managing cryptographic keys"><a href="https://emvlab.org/keyshares/?combined=35E9619A6328B6B8E432D12E0FA2516671743706BC96CFD309184F856888C4F9&combined_kcv=&one=&one_kcv=&two=&two_kcv=&three=&three_kcv=&numcomp=three&parity=ignore&action=Generate+256+bit" target="_blank">Keyshare Generator</a></div>
+      </div>
+    </div>
+      <!-- end Set 2 -->
+  </div> <!-- close sets-wrapper -->
+</div> <!-- close id #report -->
 
 
 <div id="report" class="hidden-content">
@@ -810,6 +832,7 @@
     <button class="toggle-button inner-toggle" onclick="toggleInner('cronGenerator', this)">Cron Generator</button>
     <button class="toggle-button inner-toggle" onclick="toggleInner('http-errors', this)">HTTP Errors</button>
     <button class="toggle-button inner-toggle" onclick="toggleInner('currency-code', this)">CurrencyCodes w NumericValues</button>
+    
   </div>
 
   <!-- Basic Linux Commands -->

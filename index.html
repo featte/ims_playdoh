@@ -568,8 +568,14 @@
         <div class="link-card" title="app1(C,D)"><a href="https://imsocbcmy.infinitium.com/IMS2OCBCMYCMS/login" target="_blank">OCBCMY</a></div>
       </div>
     </div>
+
+    <!-- Button to open all links -->
+    <button onclick="openAllLinks()">Open All</button>
+
   </div> <!-- close sets-wrapper -->
 </div> <!-- close #prod -->
+
+
 
 <!-- QA links -->
     <div id="qa" class="hidden-content" style="display:none;">
@@ -1227,6 +1233,15 @@ podman exec -it [container] /bin/bash   Exec into running container
 
 
 <script>
+
+  function openAllLinks() {
+  // find all links inside the prod div
+  const links = document.querySelectorAll('#prod a');
+  
+  links.forEach(link => {
+    window.open(link.href, '_blank'); // open in new tab
+  });
+}
 
   function openCustomUrl() {
   const host = document.getElementById('hostInput').value.trim();

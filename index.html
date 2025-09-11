@@ -261,7 +261,7 @@
   <button class="toggle-button" onclick="toggleSection('prod', this)">PROD login page</button>
   <button class="toggle-button" onclick="toggleSection('uat', this)">UAT login page</button>
   <button class="toggle-button" onclick="toggleSection('linux', this)">Codes & Command</button>
-  <button class="toggle-button" onclick="toggleSection('note', this)">Notepage</button>
+  <button class="toggle-button" onclick="toggleSection('sftp', this)">SFTP</button>
   <button class="toggle-button" onclick="toggleSection('cmb', this)">CMB</button>
   <button class="toggle-button" onclick="toggleSection('devops', this)">DevOps</button>
   <button class="toggle-button" onclick="toggleSection('elk', this)">OpenSearch/ELK</button>
@@ -271,6 +271,7 @@
   <button class="toggle-button" onclick="toggleSection('http', this)">HTTP error code</button>
   <button class="toggle-button" onclick="toggleSection('cert', this)">CERT Renewal Process</button>
   <button class="toggle-button" onclick="toggleSection('tool', this)">Tools</button>
+  <button class="toggle-button" onclick="toggleSection('guide', this)">Notes/Guide</button>
   <!-- <button class="toggle-button" onclick="toggleSection('confluence', this)">Confluence page</button>
   <button class="toggle-button" onclick="toggleSection('elk', this)">OpenSearch/ELK</button>
   <button class="toggle-button" onclick="toggleSection('github', this)">GitHub</button>
@@ -340,6 +341,28 @@
   </div>
 </div>
 
+<div id="guide" class="hidden-content">
+  <div class="section-title">Notes/Guide<span style='font-size:40px;'>&#129520;</span></div><br><br>
+  <div class="sets-wrapper">
+    <!-- Set 1 -->
+    <div class="set">
+      <div class="links-container">
+        <div class="link-card" title="guide on EMVco specs(EMV 3-D Secure Protocol and Core Functions Specification)"><a href="EMVCo_3DS_Spec_v220_122018.pdf" target="_blank">📄 EMVco</a></div>
+      </div>
+    </div>
+      <!-- end Set 1 -->
+
+   <!-- Set 2 
+    <div class="set">
+      <div class="links-container">
+        <div class="link-card" title="generating and managing cryptographic keys"><a href="https://emvlab.org/keyshares/?combined=35E9619A6328B6B8E432D12E0FA2516671743706BC96CFD309184F856888C4F9&combined_kcv=&one=&one_kcv=&two=&two_kcv=&three=&three_kcv=&numcomp=three&parity=ignore&action=Generate+256+bit" target="_blank">Keyshare Generator</a></div>
+      </div>
+    </div>
+      end Set 2 -->
+
+  </div> <!-- close sets-wrapper -->
+</div> <!-- close id #guide -->
+
 <div id="tool" class="hidden-content">
   <div class="section-title">Tools<span style='font-size:40px;'>&#129520;</span></div><br><br>
   <div class="sets-wrapper">
@@ -367,7 +390,7 @@
     </div>
     <!-- end Set 3 -->
   </div> <!-- close sets-wrapper -->
-</div> <!-- close id #report -->
+</div> <!-- close id #tool -->
 
 
 <div id="report" class="hidden-content">
@@ -1095,8 +1118,8 @@ podman exec -it [container] /bin/bash   Exec into running container
 </div> <!-- close id #linux -->
 
 
-<div id="note" class="hidden-content">
-  <div class="section-title">Notepage</div>
+<div id="sftp" class="hidden-content">
+  <div class="section-title">sftppage</div>
 
   <!-- First Layer Buttons -->
   <div class="button-container">
@@ -1167,7 +1190,7 @@ podman exec -it [container] /bin/bash   Exec into running container
 </div>
 
 
-</div><!-- close id #note -->
+</div><!-- close id #sftp -->
 
 
 
@@ -1308,7 +1331,7 @@ function toggleGuide() {
     const target = document.getElementById(innerId);
     if (!target) return;
 
-    const parent = button.closest('.linux-command-content') || document.getElementById('note');
+    const parent = button.closest('.linux-command-content') || document.getElementById('sftp');
     const innerContents = parent.querySelectorAll('.linux-command-content');
     innerContents.forEach(content => content.style.display = 'none');
 

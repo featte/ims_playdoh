@@ -248,13 +248,21 @@
   box-shadow: 0px 3px 6px rgba(0,0,0,0.15);
 }
 
-
+.container { margin-top: 10px; padding: 10px; border: 1px solid #ccc; }
 
   </style>
 </head>
 <body>
 
 <h1>🛝 IMS Playdoh </h1>
+
+<input type="text" id="searchBox" placeholder="Search..." onkeyup="filterPage()">
+
+<button>Container A</button>
+<button>Container B</button>
+
+<div class="container">This is Container A content</div>
+<div class="container">This is Container B content</div>
 
 <!-- Toggle Buttons -->
 <div class="button-container">
@@ -1264,6 +1272,19 @@ podman exec -it [container] /bin/bash   Exec into running container
 
 
 <script>
+
+  function filterPage() {
+  let filter = document.getElementById("searchBox").value.toLowerCase();
+  let items = document.querySelectorAll("button, .container");
+
+  items.forEach(el => {
+    if (el.innerText.toLowerCase().includes(filter)) {
+      el.style.display = "";
+    } else {
+      el.style.display = "none";
+    }
+  });
+}
 
   function openAllLinks() {
   // find all links inside the prod div

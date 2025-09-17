@@ -258,12 +258,6 @@
 
 <input type="text" id="searchBox" placeholder="Search..." onkeyup="filterPage()">
 
-<button>Container A</button>
-<button>Container B</button>
-
-<div class="container">This is Container A content</div>
-<div class="container">This is Container B content</div>
-
 <!-- Toggle Buttons -->
 <div class="button-container">
   <button class="toggle-button" onclick="toggleSection('prod', this)">PROD login page</button>
@@ -1274,14 +1268,18 @@ podman exec -it [container] /bin/bash   Exec into running container
 <script>
 
   function filterPage() {
-  let filter = document.getElementById("searchBox").value.toLowerCase();
-  let items = document.querySelectorAll("button, .container");
+  const query = document.getElementById("searchBox").value.toLowerCase();
+  const allSections = document.querySelectorAll(".hidden-content, .link-card, .toggle-button, .set-title, .section-title");
 
-  items.forEach(el => {
-    if (el.innerText.toLowerCase().includes(filter)) {
-      el.style.display = "";
-    } else {
+  allSections.forEach(el => {
+    // Reset everything visible
+    el.style.display = "";
+
+    if (query && !el.innerText.toLowerCase().includes(query)) {
       el.style.display = "none";
+    } else if (query && el.classList.contains("hidden-content")) {
+      // Auto-expand hidden sections that contain the match
+      el.style.display = "block";
     }
   });
 }

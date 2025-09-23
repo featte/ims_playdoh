@@ -262,7 +262,7 @@
   z-index: 1000;
 }
 
- body { font-family: Arial, sans-serif; background: #f9fafb; padding: 20px; }
+body { font-family: Arial, sans-serif; background: #f9fafb; padding: 20px; }
     h2 { color: #333; }
     .btn {
       background: #2563eb;
@@ -322,6 +322,21 @@
       margin-top: 15px;
       color: #111;
     }
+    .clear-all {
+      display: block;
+      margin: 20px auto 0;
+      padding: 8px 14px;
+      background: #6b7280;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .clear-all:hover { background: #4b5563; }
+
+ 
 
   </style>
 </head>
@@ -440,7 +455,7 @@
     </div>
     <!-- end Set 2 -->
 
-    <button class="btn" onclick="toggleChecklist()">Show Version Upgrade Checklist</button>
+  <button class="btn" onclick="toggleChecklist()">Show Version Upgrade Checklist</button>
 
   <div class="checklist" id="checklist">
     <h2>✅ Version Upgrade Checklist</h2>
@@ -501,6 +516,9 @@
       <li><input type="checkbox"> Apply DR patching steps as required
         <button class="clear-btn" onclick="clearBox(this)">✖</button></li>
     </ul>
+
+    <!-- Clear All Button -->
+    <button class="clear-all" onclick="clearAll()">Clear All Checkboxes</button>
   </div>
 
   </div> <!-- close sets-wrapper -->
@@ -1429,7 +1447,11 @@ podman exec -it [container] /bin/bash   Exec into running container
     function clearBox(btn) {
       const checkbox = btn.parentElement.querySelector("input[type='checkbox']");
       checkbox.checked = false;
-  }
+    }
+    function clearAll() {
+      const checkboxes = document.querySelectorAll("#checklist input[type='checkbox']");
+      checkboxes.forEach(cb => cb.checked = false);
+    }
 
   function filterPage() {
   const query = document.getElementById("searchBox").value.toLowerCase();

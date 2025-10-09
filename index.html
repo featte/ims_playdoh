@@ -1066,6 +1066,7 @@ body { font-family: Arial, sans-serif; background: #f9fafb; padding: 20px; }
     <button class="toggle-button inner-toggle" onclick="toggleInner('systemctl', this)">Systemctl Command</button>
     <button class="toggle-button inner-toggle" onclick="toggleInner('podman', this)">Podman Command</button>
     <button class="toggle-button inner-toggle" onclick="toggleInner('cron', this)">Cron Expressions</button>
+    <button class="toggle-button inner-toggle" onclick="toggleInner('octal', this)">Octal</button>
     <button class="toggle-button inner-toggle" onclick="toggleInner('cronGenerator', this)">Cron Generator</button>
     <button class="toggle-button inner-toggle" onclick="toggleInner('http-errors', this)">HTTP Errors</button>
     <button class="toggle-button inner-toggle" onclick="toggleInner('currency-code', this)">CurrencyCodes w NumericValues</button>
@@ -1131,6 +1132,51 @@ journalctl -u nginx                                   View logs for nginx servic
       </pre>
     </div>
   </div>
+
+  <!-- Octal chmod Translation -->
+<div id="octal" class="linux-command-content hidden-content">
+  <div class="link-card" style="text-align: left; width: auto;">
+    <pre>
+<b>Octal Value</b>     <b>Permission</b>            <b>Meaning</b>
+-----------------------------------------------------------------------
+0                     ---                     No permission
+1                     --x                     Execute only
+2                     -w-                     Write only
+3                     -wx                     Write and execute
+4                     r--                     Read only
+5                     r-x                     Read and execute
+6                     rw-                     Read and write
+7                     rwx                     Read, write, and execute
+
+<b>Full Example</b>
+-----------------------------------------------------------------------
+<b>Octal</b>   <b>Symbolic</b>   <b>Explanation</b>
+-----------------------------------------------------------------------
+644       rw-r--r--     Owner: read/write | Group: read | Others: read
+600       rw-------     Owner: read/write | Group: none | Others: none
+755       rwxr-xr-x     Owner: all | Group: read/exec | Others: read/exec
+700       rwx------     Owner: all | Group: none | Others: none
+775       rwxrwxr-x     Owner: all | Group: all | Others: read/exec
+777       rwxrwxrwx     Everyone has full permission
+750       rwxr-x---     Owner: all | Group: read/exec | Others: none
+
+<b>Quick Reference</b>
+-----------------------------------------------------------------------
+User (u) | Group (g) | Others (o)
+Each digit = sum of:
+4 = Read (r)
+2 = Write (w)
+1 = Execute (x)
+
+Example:
+chmod 755 fi
+Example:
+chmod 755 file.txt
+→ Owner: rwx (7) | Group: r-x (5) | Others: r-x (5)
+    </pre>
+  </div>
+</div>
+
 
   <!-- Podman Commands -->
   <div id="podman" class="linux-command-content hidden-content">

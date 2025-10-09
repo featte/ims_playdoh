@@ -1108,6 +1108,11 @@ find / -type f -name "*xyz"                                                     
 :%s/<b>ToBeReplace</b>/<b>NewName</b>/gc                                                                               go to Insert mode, then find string to rename
 journalctl -u sshd --since "2025-08-20 00:00:00" --until "2025-08-20 23:59:59"                           to check sshd log for particular date
 sudo grep abmb_sftp /var/log/secure                                                                       To check user abmb_sftp login to server or not
+journalctl -u sshd | grep "103.131.143.23"                                                                To search all SSH logs for that IP
+journalctl -u sshd --since "2025-08-20 00:00:00" --until "2025-08-20 23:59:59" | grep "103.131.143.23"    To search all SSH logs for that IP  by narrow it to a specific date/time window
+journalctl -u sshd --since "2025-08-20" | grep -c "103.131.143.23"                                        To count how many times the IP appears
+
+
       </pre>
     </div>
   </div>

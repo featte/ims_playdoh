@@ -1066,12 +1066,79 @@ body { font-family: Arial, sans-serif; background: #f9fafb; padding: 20px; }
     <button class="toggle-button inner-toggle" onclick="toggleInner('systemctl', this)">Systemctl Command</button>
     <button class="toggle-button inner-toggle" onclick="toggleInner('podman', this)">Podman Command</button>
     <button class="toggle-button inner-toggle" onclick="toggleInner('cron', this)">Cron Expressions</button>
+    <button class="toggle-button inner-toggle" onclick="toggleInner('aws-ecs', this)">AWS cli command</button>
     <button class="toggle-button inner-toggle" onclick="toggleInner('octal', this)">Octal</button>
     <button class="toggle-button inner-toggle" onclick="toggleInner('cronGenerator', this)">Cron Generator</button>
     <button class="toggle-button inner-toggle" onclick="toggleInner('http-errors', this)">HTTP Errors</button>
     <button class="toggle-button inner-toggle" onclick="toggleInner('currency-code', this)">CurrencyCodes w NumericValues</button>
     
   </div>
+
+  <!-- AWS ECS, API, and Cron Reference -->
+<div id="aws-ecs" class="linux-command-content hidden-content">
+  <div class="link-card" style="text-align: left; width: auto;">
+    <pre>
+<b>SECTION 1: AWS ECS COMMANDS</b>
+---------------------------------------------------------------------------------------------------------------
+<b>Command</b>                                                                 <b>Functionality</b>
+---------------------------------------------------------------------------------------------------------------
+aws ecs list-clusters                                                          List all ECS clusters
+aws ecs list-services --cluster cmu-sg-ims2-uat-cluster                        List all ECS services under the specified cluster
+aws ecs describe-services --cluster cmu-sg-ims2-uat-cluster --services my-svc  Describe details for a specific ECS service
+aws ecs list-tasks --cluster cmu-sg-ims2-uat-cluster --service-name my-svc     List all tasks under a given ECS service
+aws ecs describe-tasks --cluster cmu-sg-ims2-uat-cluster --tasks <taskArn>     Get task details (container, status, etc.)
+
+# Show all ECS services under cmu-sg-ims2-uat-cluster with status and counts
+for svc in $(aws ecs list-services --cluster cmu-sg-ims2-uat-cluster --query 'serviceArns[]' --output text); do
+  aws ecs describe-services --cluster cmu-sg-ims2-uat-cluster \
+    --services $(basename $svc) \
+    --query 'services[*].{ServiceName:serviceName,Status:status,Desired:desiredCount,Running:runningCount,Pending:pendingCount}' \
+    --output table
+done
+
+
+<b>SECTION 2: CIMB API UAT (SG) CURL COMMANDS</b>
+--------------------------------------------------------------------------------------------------------------
+<b>Command</b>                                                                                     <b>Functionality</b>
+--------------------------------------------------------------------------------------------------------------
+curl -v "https://uat-api.infinitium.com/api/cimb/sg"                                 Test CIMB SG UAT API via Nginx proxy (verbose)
+curl -I "https://uat-api.infinitium.com/api/cimb/sg"                                 Fetch only HTTP headers (health check)
+curl -v "https://uat-api.infinitium.com/api/cimb/sg?cif=12345"                       Send GET request with query parameter (test CIF lookup)
+curl -k -v -w "%{http_code}\n" "https://uat-api.infinitium.com/api/cimb/sg"          Verbose test ignoring SSL issues and print HTTP code
+curl -L -v "https://uat-api.infinitium.com/api/cimb/sg"                              Follow redirects if backend returns 3xx responses
+curl -v "https://api-bkp-uat.cimb.com/sg/cimb/partner/v1/card/cif?cif=12345"         Directly test backend CIMB API (bypass Nginx)
+curl -I "https://api-bkp-uat.cimb.com/sg/cimb/partner/v1/card/cif"                   Check backend CIMB API endpoint status (header only)
+
+
+<b>SECTION 3: CIMB API UAT (MY) CURL COMMANDS</b>
+--------------------------------------------------------------------------------------------------------------
+<b>Command</b>                                                                                     <b>Functionality</b>
+--------------------------------------------------------------------------------------------------------------
+curl -v "https://uat-api.infinitium.com/api/cimb/my"                                 Test CIMB MY UAT API via Nginx proxy (verbose)
+curl -I "https://uat-api.infinitium.com/api/cimb/my"                                 Fetch only HTTP headers (health check)
+curl -v "https://uat-api.infinitium.com/api/cimb/my?cif=12345"                       Send GET request with query parameter (test CIF lookup)
+curl -k -v -w "%{http_code}\n" "https://uat-api.infinitium.com/api/cimb/my"          Verbose test ignoring SSL issues and print HTTP code
+curl -L -v "https://uat-api.infinitium.com/api/cimb/my"                              Follow redirects if backend returns 3xx responses
+curl -v "https://api-bkp-uat.cimb.com/my/cimb/partner/v1/card/cif?cif=12345"         Directly test backend CIMB API (bypass Nginx)
+curl -I "https://api-bkp-uat.cimb.com/my/cimb/partner/v1/card/cif"                   Check backend CIMB API endpoint status (header only)
+
+
+<b>SECTION 4: AWS CRON EXPRESSION REFERENCE</b>
+--------------------------------------------------------------------------------------------------------------
+<b>Expression</b>                          <b>Meaning</b>
+--------------------------------------------------------------------------------------------------------------
+cron(0 8 ? * 2-6 *)                       Runs every Monday to Friday at 08:00 UTC (4:00 PM Malaysia Time)
+cron(0 2 ? * 2-6 *)                       Runs every Monday to Friday at 02:00 UTC (10:00 AM Malaysia Time)
+cron(0 14 ? * 2-6 *)                      Runs every Monday to Friday at 14:00 UTC (10:00 PM Malaysia Time)
+
+<b>Field Breakdown</b>
+Field:  Minutes  Hours  Day-of-month  Month  Day-of-week  Year
+Example:  0        8        ?           *       2-6         *
+Meaning:  At 8:00 AM UTC, Monday–Friday, every month, every year
+    </pre>
+  </div>
+</div>
+
 
   <!-- Basic Linux Commands -->
   <div id="basic" class="linux-command-content hidden-content">

@@ -1080,14 +1080,15 @@ body { font-family: Arial, sans-serif; background: #f9fafb; padding: 20px; }
   <div class="link-card" style="text-align: left; width: auto;">
     <pre>
 <b>SECTION 1: AWS ECS COMMANDS</b>
----------------------------------------------------------------------------------------------------------------
-<b>Command</b>                                                                                        <b>Functionality</b>
----------------------------------------------------------------------------------------------------------------
-aws ecs list-clusters                                                          List all ECS clusters
-aws ecs list-services --cluster cmu-sg-ims2-uat-cluster                        List all ECS services under the specified cluster
-aws ecs describe-services --cluster cmu-sg-ims2-uat-cluster --services my-svc  Describe details for a specific ECS service
-aws ecs list-tasks --cluster cmu-sg-ims2-uat-cluster --service-name my-svc     List all tasks under a given ECS service
-aws ecs describe-tasks --cluster cmu-sg-ims2-uat-cluster --tasks <taskArn>              Get task details (container, status, etc.)
+---------------------------------------------------------------------------------------------------------------------------------------------------
+<b>Command</b>                                                                                                             <b>Functionality</b>
+---------------------------------------------------------------------------------------------------------------------------------------------------
+aws ecs list-clusters                                                                                              List all ECS clusters
+aws ecs list-services --cluster cmu-sg-ims2-uat-cluster                                                            List all ECS services under the specified cluster
+aws ecs describe-services --cluster cmu-sg-ims2-uat-cluster --services my-svc                                      Describe details for a specific ECS service
+aws ecs list-tasks --cluster cmu-sg-ims2-uat-cluster --service-name my-svc                                         List all tasks under a given ECS service
+aws ecs update-service \ --cluster cmu-sg-ims2-uat-cluster \ --service ims2-cimbmyuat-acs-service \ --desired-count 1     <b>To manually rbing up the service</b>
+aws ecs describe-tasks --cluster cmu-sg-ims2-uat-cluster --tasks <taskArn>                                                           Get task details (container, status, etc.)
 
 # Show all ECS services under cmu-sg-ims2-uat-cluster with status and counts
 for svc in $(aws ecs list-services --cluster cmu-sg-ims2-uat-cluster --query 'serviceArns[]' --output text); do

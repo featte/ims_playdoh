@@ -1074,6 +1074,7 @@ body { font-family: Arial, sans-serif; background: #f9fafb; padding: 20px; }
     <button class="toggle-button inner-toggle" onclick="toggleInner('cronGenerator', this)">Cron Generator</button>
     <button class="toggle-button inner-toggle" onclick="toggleInner('http-errors', this)">HTTP Errors</button>
     <button class="toggle-button inner-toggle" onclick="toggleInner('currency-code', this)">CurrencyCodes w NumericValues</button>
+    <button class="toggle-button inner-toggle" onclick="toggleInner('sql', this)">SQL Comand</button>
     
   </div>
 
@@ -1142,6 +1143,24 @@ Meaning:  At 8:00 AM UTC, Monday–Friday, every month, every year
     </pre>
   </div>
 </div>
+
+<!-- Basic SQL Commands -->
+  <div id="sql" class="linux-command-content hidden-content">
+    <div class="link-card" style="text-align: left; width: auto;">
+      <pre>
+<b>To check PSQL version</b>                                                                                              
+-------------------------------------------------------------------------------------------------------------------------------------------------
+SELECT version();
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+<b>To check CMS version</b>                                                                                              
+-------------------------------------------------------------------------------------------------------------------------------------------------
+SELECT * from dbo.systemsetting WHERE systemname LIKE '%VERSION';
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+      </pre>
+    </div>
+  </div>
 
 
   <!-- Basic Linux Commands -->

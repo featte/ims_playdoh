@@ -612,6 +612,7 @@ body { font-family: Arial, sans-serif; background: #f9fafb; padding: 20px; }
         <!--<li><a href="" target="_blank">IMAP resend request</a> - to resend request, mainly for OOB, try get transID from elk and check in CMS[probably BMS not send out response] </li> -->
         <li><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/data-explorer/discover#?_a=(discover:(columns:!(log.file.path,remain_message),isDirty:!f,sort:!()),metadata:(indexPattern:'6cbd7240-4af2-11ee-8ba2-e5fb86697e45',view:discover))&_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now%2Fd,to:now%2Fd))&_q=(filters:!(),query:(language:kuery,query:'remain_message:%20ldap%20and%20tags:%20ims2abmbmy'))" target="_blank">LDAP issue</a> - to check ldap issue if CMS unable to login with valid username&pswd </li>
         <li><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/data-explorer/discover/#?_g=(filters:!(),refreshInterval:(pause:!t,value:5000),time:(from:'2025-09-29T16:00:00.000Z',to:'2025-10-04T15:30:00.000Z'))&_a=(discover:(columns:!(log.file.path,host.name,response_code,client_ip),interval:auto,sort:!()),metadata:(indexPattern:'5767f540-3391-11ef-bba6-972ab7ae9901',view:discover))&_q=(filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'5767f540-3391-11ef-bba6-972ab7ae9901',key:log.file.path,negate:!f,params:(query:%2Flogdrive%2FIMS2ABMBMY%2Fcms%2Fcms-access.log),type:phrase),query:(match_phrase:(log.file.path:%2Flogdrive%2FIMS2ABMBMY%2Fcms%2Fcms-access.log))),('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'5767f540-3391-11ef-bba6-972ab7ae9901',key:response_code,negate:!f,params:(query:403),type:phrase),query:(match_phrase:(response_code:403)))),query:(language:kuery,query:'log.file.path%20:%20*ABMBMY*'))" target="_blank">ims2 nginx access log error code</a> - to check reponse code error on access log </li>
+        <li><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/data-explorer/discover/#?_g=(filters:!(),refreshInterval:(pause:!f,value:5000),time:(from:now-15m,to:now))&_a=(discover:(columns:!(host.hostname,remain_message,transactionID,log.level,app_server_ip,client_ip,log.file.path,response_code,upstream_response_time,rawrequest),interval:auto,isDirty:!t,sort:!()),metadata:(indexPattern:'5767f540-3391-11ef-bba6-972ab7ae9901',view:discover))&_q=(filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'5767f540-3391-11ef-bba6-972ab7ae9901',key:response_code,negate:!f,params:(query:200),type:phrase),query:(match_phrase:(response_code:200)))),query:(language:kuery,query:'host.hostname%20:%20*pciimsauthweb*'))" target="_blank">imap nginx access log error code</a> - to check reponse code error on access log/RP for <b>IMSAUTHCIMBMY</b> </li>
       </ul>
       
     </div> <!-- close #elk -->
@@ -1156,6 +1157,107 @@ SELECT version();
 <b>To check CMS version</b>                                                                                              
 -------------------------------------------------------------------------------------------------------------------------------------------------
 SELECT * from dbo.systemsetting WHERE systemname LIKE '%VERSION';
+-------------------------------------------------------------------------------------------------------------------------------------------------
+<b>To check PostgreSQL version</b>                                                                                              
+-------------------------------------------------------------------------------------------------------------------------------------------------
+SELECT version();
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+<b>To list all databases</b>                                                                                              
+-------------------------------------------------------------------------------------------------------------------------------------------------
+SELECT datname FROM pg_database;
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+<b>To connect to a specific database</b>                                                                                              
+-------------------------------------------------------------------------------------------------------------------------------------------------
+\c database_name;
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+<b>To check current connected database</b>                                                                                              
+-------------------------------------------------------------------------------------------------------------------------------------------------
+SELECT current_database();
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+<b>To check current logged-in user</b>                                                                                              
+-------------------------------------------------------------------------------------------------------------------------------------------------
+SELECT current_user;
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+<b>To list all schemas in current database</b>                                                                                              
+-------------------------------------------------------------------------------------------------------------------------------------------------
+SELECT schema_name FROM information_schema.schemata;
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+<b>To list all tables in a schema</b>                                                                                              
+-------------------------------------------------------------------------------------------------------------------------------------------------
+SELECT table_name 
+FROM information_schema.tables 
+WHERE table_schema = 'public';
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+<b>To describe table structure (columns & data types)</b>                                                                                              
+-------------------------------------------------------------------------------------------------------------------------------------------------
+SELECT column_name, data_type, is_nullable
+FROM information_schema.columns
+WHERE table_name = 'table_name';
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+<b>To check total row count in a table</b>                                                                                              
+-------------------------------------------------------------------------------------------------------------------------------------------------
+SELECT COUNT(*) FROM table_name;
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+<b>To view latest records from a table</b>                                                                                              
+-------------------------------------------------------------------------------------------------------------------------------------------------
+SELECT *
+FROM table_name
+ORDER BY created_date DESC
+LIMIT 10;
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+<b>To check running active database sessions</b>                                                                                              
+-------------------------------------------------------------------------------------------------------------------------------------------------
+SELECT pid, usename, datname, client_addr, state, query
+FROM pg_stat_activity
+WHERE state = 'active';
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+<b>To identify long-running queries</b>                                                                                              
+-------------------------------------------------------------------------------------------------------------------------------------------------
+SELECT pid, now() - query_start AS duration, query
+FROM pg_stat_activity
+WHERE state = 'active'
+ORDER BY duration DESC;
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+<b>To terminate a problematic session (use carefully)</b>                                                                                              
+-------------------------------------------------------------------------------------------------------------------------------------------------
+SELECT pg_terminate_backend(pid);
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+<b>To check database size</b>                                                                                              
+-------------------------------------------------------------------------------------------------------------------------------------------------
+SELECT pg_size_pretty(pg_database_size('database_name'));
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+<b>To check table size</b>                                                                                              
+-------------------------------------------------------------------------------------------------------------------------------------------------
+SELECT pg_size_pretty(pg_total_relation_size('table_name'));
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+<b>To check index usage for a table</b>                                                                                              
+-------------------------------------------------------------------------------------------------------------------------------------------------
+SELECT relname, idx_scan, idx_tup_read, idx_tup_fetch
+FROM pg_stat_user_indexes
+WHERE relname = 'table_name';
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
+<b>To check recent errors from PostgreSQL logs (if log table exists)</b>                                                                                              
+-------------------------------------------------------------------------------------------------------------------------------------------------
+SELECT *
+FROM error_log_table
+ORDER BY log_time DESC
+LIMIT 20;
 -------------------------------------------------------------------------------------------------------------------------------------------------
 
       </pre>

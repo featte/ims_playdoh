@@ -1,0 +1,1733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="icon" href="dk.png" type="image/png">
+  <meta charset="UTF-8">
+  <title>POWERHOUSE // Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090c10;
+      --surface: #0d1117;
+      --surface2: #161b22;
+      --border: #21262d;
+      --border-glow: #00ffe7;
+      --accent: #00ffe7;
+      --accent2: #7c3aed;
+      --accent3: #f97316;
+      --text: #e6edf3;
+      --text-muted: #8b949e;
+      --text-dim: #F5DD27;
+      --danger: #ff4560;
+      --mono: 'JetBrains Mono', monospace;
+      --sans: 'Inter', sans-serif;
+      --glow: 0 0 12px rgba(0,255,231,0.25);
+      --glow-strong: 0 0 24px rgba(0,255,231,0.4);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    /* ── SCANLINE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.03) 2px,
+        rgba(0,0,0,0.03) 4px
+      );
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ── HEADER ── */
+    .header {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 32px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      backdrop-filter: blur(10px);
+    }
+
+    .logo {
+      font-family: var(--mono);
+      font-size: 18px;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      text-shadow: var(--glow);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 10px var(--accent);
+      animation: pulse-dot 2s ease infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; box-shadow: 0 0 10px var(--accent); }
+      50% { opacity: 0.4; box-shadow: 0 0 4px var(--accent); }
+    }
+
+    .datetime-display {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+    }
+
+    #searchBox {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 8px 14px;
+      border-radius: 4px;
+      width: 200px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      letter-spacing: 0.05em;
+    }
+
+    #searchBox:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 8px rgba(0,255,231,0.15);
+    }
+
+    #searchBox::placeholder { color: var(--text-dim); }
+
+    /* ── MAIN LAYOUT ── */
+    .main {
+      display: flex;
+      height: calc(100vh - 61px);
+    }
+
+    /* ── SIDEBAR NAV ── */
+    .sidebar {
+      width: 200px;
+      flex-shrink: 0;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 16px 0;
+      overflow-y: auto;
+    }
+
+    .nav-label {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      color: var(--text-dim);
+      padding: 12px 20px 6px;
+      text-transform: uppercase;
+    }
+
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 20px;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 400;
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
+      transition: all 0.15s;
+      position: relative;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-btn:hover {
+      color: var(--text);
+      background: var(--surface2);
+    }
+
+    .nav-btn.active {
+      color: var(--accent);
+      background: rgba(0,255,231,0.05);
+    }
+
+    .nav-btn.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+    }
+
+    .nav-btn .icon {
+      font-size: 14px;
+      width: 18px;
+      text-align: center;
+      opacity: 0.7;
+    }
+
+    .nav-btn.active .icon { opacity: 1; }
+
+    /* ── CONTENT AREA ── */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 28px 32px;
+      background: var(--bg);
+    }
+
+    /* custom scrollbar */
+    .content::-webkit-scrollbar,
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .content::-webkit-scrollbar-track,
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .content::-webkit-scrollbar-thumb,
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    /* ── PANELS ── */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .panel-title {
+      font-family: var(--mono);
+      font-size: 14px;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      text-transform: uppercase;
+    }
+
+    .panel-tag {
+      font-family: var(--mono);
+      font-size: 10px;
+      padding: 2px 8px;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+    }
+
+    /* ── GRID OF CARDS ── */
+    .card-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .card-group {
+      margin-bottom: 28px;
+    }
+
+    .group-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    /* ── LINK CARD ── */
+    .lcard {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 9px 16px;
+      transition: all 0.2s;
+      position: relative;
+      overflow: visible;
+    }
+
+    .lcard:hover {
+      border-color: var(--accent);
+      background: rgba(0,255,231,0.04);
+      box-shadow: var(--glow);
+      transform: translateY(-1px);
+    }
+
+    .lcard a {
+      text-decoration: none;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 400;
+      display: block;
+      white-space: nowrap;
+    }
+
+    .lcard:hover a { color: var(--accent); }
+
+    /* hover note */
+    .hover-note {
+      display: none;
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      z-index: 100;
+      background: var(--surface2);
+      border: 1px solid var(--accent);
+      box-shadow: var(--glow);
+      padding: 10px 14px;
+      border-radius: 4px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--accent);
+      white-space: nowrap;
+      user-select: text;
+      cursor: text;
+    }
+
+    .lcard:hover .hover-note { display: block; }
+
+    /* multi-open btn */
+    .lcard-multi {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 9px 16px;
+      transition: all 0.2s;
+    }
+
+    .lcard-multi:hover {
+      border-color: var(--accent);
+      background: rgba(0,255,231,0.04);
+      box-shadow: var(--glow);
+      transform: translateY(-1px);
+    }
+
+    .lcard-multi button {
+      background: none;
+      border: none;
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 13px;
+      cursor: pointer;
+      padding: 0;
+      transition: color 0.2s;
+    }
+
+    .lcard-multi:hover button { color: var(--accent); }
+
+    /* ── INNER TABS ── */
+    .inner-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 20px;
+    }
+
+    .inner-tab {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      color: var(--text-muted);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      padding: 6px 14px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .inner-tab:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .inner-tab.active {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(0,255,231,0.06);
+      box-shadow: 0 0 8px rgba(0,255,231,0.1);
+    }
+
+    .inner-panel { display: none; }
+    .inner-panel.active { display: block; }
+
+    /* ── CODE BLOCK ── */
+    .code-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 20px 24px;
+      overflow-x: auto;
+    }
+
+    .code-block pre {
+      font-family: var(--mono);
+      font-size: 12px;
+      line-height: 1.8;
+      color: var(--text);
+      white-space: pre;
+    }
+
+    .code-block pre b { color: var(--accent); }
+
+    /* ── TABLE ── */
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 13px;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      text-align: left;
+      padding: 8px 14px;
+    }
+
+    th {
+      background: var(--surface);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      font-weight: 400;
+    }
+
+    tr:nth-child(even) td { background: rgba(255,255,255,0.015); }
+    tr:hover td { background: rgba(0,255,231,0.03); }
+
+    /* ── ELK LINK LIST ── */
+    .elk-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .elk-item {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 10px 16px;
+      transition: all 0.15s;
+    }
+
+    .elk-item:hover {
+      border-color: rgba(0,255,231,0.4);
+      background: rgba(0,255,231,0.03);
+    }
+
+    .elk-item a {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--accent);
+      text-decoration: none;
+      white-space: nowrap;
+      transition: color 0.15s;
+    }
+
+    .elk-item a:hover { color: #fff; }
+
+    .elk-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ── CERT URL BUILDER ── */
+    .url-builder {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .url-builder input,
+    .url-builder select {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: 4px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .url-builder input { width: 320px; }
+    .url-builder input:focus,
+    .url-builder select:focus { border-color: var(--accent); }
+
+    .url-builder select option { background: var(--surface2); }
+
+    .btn-go {
+      background: rgba(0,255,231,0.1);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 8px 18px;
+      border-radius: 4px;
+      cursor: pointer;
+      letter-spacing: 0.08em;
+      transition: all 0.15s;
+    }
+
+    .btn-go:hover {
+      background: var(--accent);
+      color: var(--bg);
+    }
+
+    /* ── INFO POPUP ── */
+    .info-container { position: relative; display: inline-block; margin-top: 12px; }
+
+    .info-icon {
+      font-size: 14px;
+      cursor: pointer;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      border-radius: 50%;
+      width: 26px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      user-select: none;
+    }
+
+    .info-icon:hover {
+      border-color: var(--accent);
+      box-shadow: var(--glow);
+    }
+
+    .info-popup {
+      display: none;
+      position: absolute;
+      top: 34px;
+      left: 0;
+      width: 380px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px;
+      font-size: 12px;
+      line-height: 1.7;
+      z-index: 200;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      color: var(--text-muted);
+    }
+
+    .info-popup strong { color: var(--accent); font-family: var(--mono); }
+    .info-popup u { color: var(--text); text-decoration: none; font-weight: 600; }
+
+    /* ── CHECKLIST ── */
+    .checklist-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 20px 24px;
+      margin-top: 16px;
+    }
+
+    .checklist-wrap h2 {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      margin-bottom: 16px;
+    }
+
+    .chk-section {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin: 16px 0 8px;
+    }
+
+    .chk-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+
+    .chk-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .chk-list input[type="checkbox"] {
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      cursor: pointer;
+      position: relative;
+      flex-shrink: 0;
+      transition: all 0.15s;
+    }
+
+    .chk-list input[type="checkbox"]:checked {
+      background: var(--accent);
+      border-color: var(--accent);
+      box-shadow: 0 0 6px var(--accent);
+    }
+
+    .chk-list input[type="checkbox"]:checked::after {
+      content: "✓";
+      position: absolute;
+      top: -1px;
+      left: 1px;
+      font-size: 12px;
+      color: var(--bg);
+      font-weight: bold;
+    }
+
+    .clear-btn {
+      margin-left: auto;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      border-radius: 3px;
+      font-size: 10px;
+      padding: 2px 7px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .clear-btn:hover { border-color: var(--danger); color: var(--danger); }
+
+    .btn-primary {
+      background: rgba(0,255,231,0.08);
+      border: 1px solid rgba(0,255,231,0.3);
+      color: var(--accent);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      padding: 7px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-primary:hover {
+      background: rgba(0,255,231,0.15);
+      border-color: var(--accent);
+    }
+
+    .btn-secondary {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      padding: 7px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s;
+      margin-top: 16px;
+      display: block;
+    }
+
+    .btn-secondary:hover { color: var(--text); border-color: var(--text-muted); }
+
+    /* ── OPEN ALL BTN ── */
+    .btn-openall {
+      background: rgba(249,115,22,0.1);
+      border: 1px solid rgba(249,115,22,0.4);
+      color: var(--accent3);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      padding: 7px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-openall:hover {
+      background: rgba(249,115,22,0.2);
+      border-color: var(--accent3);
+    }
+
+    /* ── QA SECTION TITLES ── */
+    .qa-section { margin-bottom: 24px; }
+    .qa-section h3 {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* ── SFTP ANIMATED TOOLTIPS ── */
+    .animated-fade {
+      color: var(--accent);
+      font-family: var(--mono);
+      cursor: help;
+      font-size: 12px;
+      animation: fadeInOut 2.5s ease infinite;
+    }
+
+    @keyframes fadeInOut {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    /* ── HOVER REVEAL FOOTER ── */
+    .hover-reveal {
+      position: fixed;
+      bottom: 12px;
+      right: 20px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text-dim);
+      letter-spacing: 0.1em;
+      cursor: default;
+      transition: color 0.3s;
+    }
+
+    .hover-reveal .hidden-text {
+      color: transparent;
+      transition: color 0.3s;
+    }
+
+    .hover-reveal:hover .hidden-text { color: var(--accent); }
+
+    /* ── STATUS BADGE ── */
+    .badge {
+      font-family: var(--mono);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      padding: 2px 7px;
+      border-radius: 2px;
+      text-transform: uppercase;
+    }
+
+    .badge-prod { background: rgba(249,115,22,0.15); color: var(--accent3); border: 1px solid rgba(249,115,22,0.3); }
+    .badge-uat  { background: rgba(124,58,237,0.15); color: #a78bfa; border: 1px solid rgba(124,58,237,0.3); }
+    .badge-sg   { background: rgba(0,255,231,0.1); color: var(--accent); border: 1px solid rgba(0,255,231,0.2); }
+
+    /* ── MAINTENANCE ── */
+    .maintenance {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      padding: 32px;
+      border: 1px dashed var(--border);
+      border-radius: 6px;
+      color: var(--text-dim);
+      font-family: var(--mono);
+      font-size: 13px;
+      letter-spacing: 0.1em;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 20px 0;
+    }
+
+    /* ── SCROLL TO TOP ── */
+    .scroll-top {
+      position: fixed;
+      bottom: 12px;
+      left: 220px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: none;
+    }
+
+    .scroll-top:hover { border-color: var(--accent); color: var(--accent); }
+  </style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<div class="header">
+  <div class="logo">POWERHOUSE</div>
+  <div class="datetime-display" id="datetime"></div>
+  <input type="text" id="searchBox" placeholder="Search..." onkeyup="filterPage()" title='ESC to clear'>
+</div>
+
+<div class="main">
+
+  <!-- ── SIDEBAR ── -->
+  <nav class="sidebar">
+    <div class="nav-label">Operations</div>
+    <button class="nav-btn" onclick="showPanel('prod', this)"><span class="icon">🔴</span> PROD Login</button>
+    <button class="nav-btn" onclick="showPanel('uat', this)"><span class="icon">🟣</span> UAT Login</button>
+    <button class="nav-btn" onclick="showPanel('imap', this)"><span class="icon">🔐</span> IMAP</button>
+    <button class="nav-btn" onclick="showPanel('report', this)"><span class="icon">📊</span> Reports</button>
+
+    <div class="nav-label">Infrastructure</div>
+    <button class="nav-btn" onclick="showPanel('sftp', this)"><span class="icon">📁</span> SFTP</button>
+    <button class="nav-btn" onclick="showPanel('cmb', this)"><span class="icon">📋</span> CMB</button>
+    <button class="nav-btn" onclick="showPanel('devops', this)"><span class="icon">⚙️</span> DevOps</button>
+    <button class="nav-btn" onclick="showPanel('elk', this)"><span class="icon">🔍</span> OpenSearch/ELK</button>
+    <button class="nav-btn" onclick="showPanel('cert', this)"><span class="icon">🔒</span> CERT Renewal</button>
+
+    <div class="nav-label">Reference</div>
+    <button class="nav-btn" onclick="showPanel('linux', this)"><span class="icon">💻</span> Codes & Commands</button>
+    <button class="nav-btn" onclick="showPanel('http', this)"><span class="icon">🌐</span> HTTP Error Codes</button>
+    <button class="nav-btn" onclick="showPanel('qa', this)"><span class="icon">🔎</span> Queries</button>
+    <button class="nav-btn" onclick="showPanel('guide', this)"><span class="icon">📝</span> Notes/Guide</button>
+    <button class="nav-btn" onclick="showPanel('tool', this)"><span class="icon">🛠</span> Tools</button>
+  </nav>
+
+  <!-- ── CONTENT ── -->
+  <div class="content" id="mainContent">
+
+    <!-- ── PROD ── -->
+    <div id="panel-prod" class="panel">
+      <div class="panel-header">
+        <span class="panel-title">PROD CMS Login</span>
+        <span class="badge badge-prod">PRODUCTION</span>
+        <button class="btn-openall" onclick="openAllProd()" style="margin-left:auto">▶ OPEN ALL</button>
+      </div>
+      <div class="card-group">
+        <div class="group-label">SET 1 — app1(C,D)</div>
+        <div class="card-grid">
+          <div class="lcard"><a href="https://imsabmbmy.infinitium.com/IMS2ABMBMYCMS/login" target="_blank">ABMBMY</a></div>
+          <div class="lcard"><a href="https://imsaffinmy.infinitium.com/IMS2AFFINMYCMS/login" target="_blank">AFFINMY</a></div>
+          <div class="lcard"><a href="https://imsmbfmy.infinitium.com/IMS2AMBANKMYCMS/login" target="_blank">AMBANKMY</a></div>
+          <div class="lcard"><a href="https://imsbsnmy.infinitium.com/IMS2BSNMYCMS/login" target="_blank">BSNMY</a></div>
+          <div class="lcard"><a href="https://imsmbsbmy.infinitium.com/IMS2MBSBMYCMS/login" target="_blank">MBSBMY</a></div>
+          <div class="lcard"><a href="https://imsrhbmy.infinitium.com/IMS2RHBMYCMS/login" target="_blank">RHBMY</a></div>
+        </div>
+      </div>
+      <div class="card-group">
+        <div class="group-label">SET 2 — app2(C,D)</div>
+        <div class="card-grid">
+          <div class="lcard"><a href="https://imsaeoncreditmy.infinitium.com/IMS2AEONCREDITMYCMS/login" target="_blank">AEONCREDITMY</a></div>
+          <div class="lcard"><a href="https://imsagromy.infinitium.com/IMS2AGROMYCMS/login" target="_blank">AGROMY</a></div>
+          <div class="lcard"><a href="https://imsbimy.infinitium.com/IMS2BIMYCMS/login" target="_blank">BIMY</a></div>
+          <div class="lcard"><a href="https://imsbkrmmy.infinitium.com/IMS2BKRMMYCMS/login" target="_blank">BKRMMY</a></div>
+          <div class="lcard"><a href="https://imshlbmy.infinitium.com/IMS2HLBMYCMS/login" target="_blank">HLBMY</a></div>
+          <div class="lcard"><a href="https://imsscbmy.infinitium.com/IMS2SCBMYCMS/login" target="_blank">SCBMY</a></div>
+        </div>
+      </div>
+      <div class="card-group">
+        <div class="group-label">SET 3 — app3</div>
+        <div class="card-grid">
+          <div class="lcard"><a href="https://imscimbmy.infinitium.com/IMS2CIMBMYCMS/login" target="_blank">CIMBMY</a></div>
+          <div class="lcard"><a href="https://imscimbsg.infinitium.com/IMS2CIMBSGCMS/login" target="_blank">CIMBSG</a></div>
+        </div>
+      </div>
+      <div class="card-group">
+        <div class="group-label">SET 4 — app4(C,D)</div>
+        <div class="card-grid">
+          <div class="lcard"><a href="https://imslbph.infinitium.com/IMS2LBPHCMS/login" target="_blank">LBPH</a></div>
+          <div class="lcard"><a href="https://imsrhbkh.infinitium.com/IMS2RHBKHCMS/login" target="_blank">RHBKH</a></div>
+          <div class="lcard"><a href="https://imsubank.infinitium.com/IMS2UBANKPKCMS/login" target="_blank">UBANKPK</a></div>
+          <div class="lcard"><a href="https://imsbibd.infinitium.com/IMS2BIBDCMS/login" target="_blank">BIBD</a></div>
+          <div class="lcard"><a href="https://imsmabmm.infinitium.com/IMS2MABMMCMS/loginn" target="_blank">MABMM</a></div>
+        </div>
+      </div>
+      <div class="card-group">
+        <div class="group-label">SET 5 — app5(C,D)</div>
+        <div class="card-grid">
+          <div class="lcard-multi"><button onclick="openMultipleTabs(['https://imssoneripk.infinitium.com/IMS2SONERIPKCMS/login','https://imssoneripk.infinitium.com:9599/IMS2SONERIPKWS/api/services/CardEnrollmentWS.wsdl'])">SONERIPK ↗↗</button></div>
+          <div class="lcard-multi"><button onclick="openMultipleTabs(['https://imsyappk.infinitium.com/IMS2YAPPKCMS/login','https://imsyappk.infinitium.com:9599/IMS2YAPPKWS/api/services/CardEnrollmentWS.wsdl'])">YAPPK ↗↗</button></div>
+        </div>
+      </div>
+      <div class="card-group">
+        <div class="group-label">SG — app1(C,D)</div>
+        <div class="card-grid">
+          <div class="lcard"><a href="https://imsmbbsg.infinitium.com/IMS2MBBSGCMS/login" target="_blank">MBBSG</a></div>
+          <div class="lcard"><a href="https://imsocbcsg.infinitium.com/IMS2OCBCSGCMS/login" target="_blank">OCBCSG</a></div>
+          <div class="lcard"><a href="https://imsocbcmy.infinitium.com/IMS2OCBCMYCMS/login" target="_blank">OCBCMY</a></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── UAT ── -->
+    <div id="panel-uat" class="panel">
+      <div class="panel-header">
+        <span class="panel-title">UAT Login &amp; Simulator</span>
+        <span class="badge badge-uat">UAT</span>
+      </div>
+
+      <div class="card-group">
+        <div class="group-label">appluna1 — 161.46</div>
+        <div class="card-grid">
+          <div class="lcard-multi"><button onclick="openMultipleTabs(['https://uatabmbmy.infinitiumsolutions.com/IMS2ABMBMYCMS/login','https://3dsecureabmbmyuat.infinitiumsolutions.com/IMS2ABMBMYACS/api/3d2/simulator/'])">uatABMBMY ↗↗</button></div>
+          <div class="lcard-multi"><button onclick="openMultipleTabs(['https://uataffinmy.infinitiumsolutions.com/IMS2AFFINMYCMS/login','https://3dsecureaffinmyuat.infinitiumsolutions.com/IMS2AFFINMYACS/api/3d2/simulator/'])">uatAFFINMY ↗↗</button></div>
+          <div class="lcard-multi"><button onclick="openMultipleTabs(['https://uatmbfmy.infinitiumsolutions.com/IMS2AMBANKMYCMS/login','https://3dsecurembfmyuat.infinitiumsolutions.com/IMS2AMBANKMYACS/api/3d2/simulator/'])">uatAMBANKMY ↗↗</button></div>
+          <div class="lcard-multi"><button onclick="openMultipleTabs(['https://uatbsnmy.infinitiumsolutions.com/IMS2BSNMYCMS/login','https://3dsecurebsnmyuat.infinitiumsolutions.com/IMS2BSNMYACS/api/3d2/simulator/'])">uatBSNMY ↗↗</button></div>
+          <div class="lcard-multi"><button onclick="openMultipleTabs(['https://uatmbsbmy.infinitiumsolutions.com/IMS2MBSBMYCMS/login','https://3dsecurembsbmyuat.infinitiumsolutions.com/IMS2MBSBMYACS/api/3d2/simulator/'])">uatMBSBMY ↗↗</button></div>
+          <div class="lcard-multi"><button onclick="openMultipleTabs(['https://uatrhbmy.infinitiumsolutions.com/IMS2RHBMYCMS/login','https://3dsecurerhbmyuat.infinitiumsolutions.com/IMS2RHBMYACS/api/3d2/simulator/'])">uatRHBMY ↗↗</button></div>
+        </div>
+      </div>
+      <div class="card-group">
+        <div class="group-label">appluna2 — 161.5</div>
+        <div class="card-grid">
+          <div class="lcard-multi"><button onclick="openMultipleTabs(['https://uataeoncreditmy.infinitiumsolutions.com/IMS2AEONCREDITMYCMS/login','https://3dsecureaeoncreditmyuat.infinitiumsolutions.com/IMS2AEONCREDITMYACS/api/3d2/simulator/'])">uatAEONCREDITMY ↗↗</button></div>
+          <div class="lcard-multi"><button onclick="openMultipleTabs(['https://uatagromy.infinitiumsolutions.com/IMS2AGROMYCMS/login','https://3dsecureagromyuat.infinitiumsolutions.com/IMS2AGROMYACS/api/3d2/simulator/'])">uatAGROMY ↗↗</button></div>
+          <div class="lcard-multi"><button onclick="openMultipleTabs(['https://uatbimy.infinitiumsolutions.com/IMS2BIMYCMS/login','https://3dsecurebimyuat.infinitiumsolutions.com/IMS2BIMYACS/api/3d2/simulator/'])">uatBIMY ↗↗</button></div>
+          <div class="lcard-multi"><button onclick="openMultipleTabs(['https://uatbkrmmy.infinitiumsolutions.com/IMS2BKRMMYCMS/login','https://3dsecurebkrmmyuat.infinitiumsolutions.com/IMS2BKRMMYACS/api/3d2/simulator/'])">uatBKRMMY ↗↗</button></div>
+          <div class="lcard-multi"><button onclick="openMultipleTabs(['https://uathlbmy.infinitiumsolutions.com/IMS2HLBMYCMS/login','https://3dsecurehlbmyuat.infinitiumsolutions.com/IMS2HLBMYACS/api/3d2/simulator/'])">uatHLBMY ↗↗</button></div>
+          <div class="lcard-multi"><button onclick="openMultipleTabs(['https://ims2cmsuat.infinitiumsolutions.com/IMS2SCBMYCMS/login','https://3dsecureuat.infinitiumsolutions.com/IMS2SCBMYACS/api/3d2/simulator/'])">uatSCBMY ↗↗</button></div>
+        </div>
+      </div>
+      <div class="card-group">
+        <div class="group-label">appluna6 — 161.26</div>
+        <div class="card-grid">
+          <div class="lcard-multi"><button onclick="openMultipleTabs(['https://uatbibd.infinitiumsolutions.com/IMS2BIBDCMS/login','https://3dsecurebibduat.infinitiumsolutions.com/IMS2BIBDACS/api/3d2/simulator/'])">uatBIBD ↗↗</button></div>
+          <div class="lcard-multi"><button onclick="openMultipleTabs(['https://uatlbph.infinitiumsolutions.com/IMS2LBPHCMS/login','https://3dsecurelbphuat.infinitiumsolutions.com/IMS2LBPHACS/api/3d2/simulator/'])">uatLBPH ↗↗</button></div>
+          <div class="lcard-multi"><button onclick="openMultipleTabs(['https://uatmabmm.infinitiumsolutions.com/IMS2MABMMCMS/login','https://3dsecuremabmmuat.infinitiumsolutions.com/IMS2MABMMACS/api/3d2/simulator/'])">uatMABMM ↗↗</button></div>
+          <div class="lcard-multi"><button onclick="openMultipleTabs(['https://uatrhbkh.infinitiumsolutions.com/IMS2RHBKHCMS/login','https://3dsecurerhbkhuat.infinitiumsolutions.com/IMS2RHBKHACS/api/3d2/simulator/'])">uatRHBKH ↗↗</button></div>
+          <div class="lcard-multi"><button onclick="openMultipleTabs(['https://uatubank.infinitiumsolutions.com/IMS2UBANKPKCMS/login','https://3dsecureuatubank.infinitiumsolutions.com/IMS2UBANKPKACS/api/3d2/simulator/'])">uatUBANKPK ↗↗</button></div>
+        </div>
+      </div>
+      <div class="card-group">
+        <div class="group-label">app8 — 161.13 (SG)</div>
+        <div class="card-grid">
+          <div class="lcard-multi"><button onclick="openMultipleTabs(['https://uatmbbsg.infinitiumsolutions.com/IMS2MBBSGCMS/login','https://3dsecurembbsguat.infinitiumsolutions.com/IMS2MBBSGACS/api/3d2/simulator/'])">uatMBBSG ↗↗</button></div>
+          <div class="lcard-multi"><button onclick="openMultipleTabs(['https://uatocbcmy.infinitiumsolutions.com/IMS2OCBCMYCMS/login','https://3dsecureocbcmyuat.infinitiumsolutions.com/IMS2OCBCMYACS/api/3d2/simulator/'])">uatOCBCMY ↗↗</button></div>
+        </div>
+      </div>
+      <div class="card-group">
+        <div class="group-label">appluna7 — 161.124 (PK)</div>
+        <div class="card-grid">
+          <div class="lcard-multi"><button onclick="openMultipleTabs(['https://uatyappk.infinitiumsolutions.com/IMS2YAPPKCMS/login','https://imsuat-3dsecure.infinitiumsolutions.com/IMS2YAPPKACS/api/3d2/simulator/','https://uatyappk.infinitiumsolutions.com:9599/IMS2YAPPKWS/api/services/CardEnrollmentWS.wsdl'])">uatYAPPK ↗↗↗</button></div>
+          <div class="lcard-multi"><button onclick="openMultipleTabs(['https://uatsoneripk.infinitiumsolutions.com/IMS2SONERIPKCMS/login','https://imsuat-3dsecure.infinitiumsolutions.com/IMS2SONERIPKACS/api/3d2/simulator/','https://uatsoneripk.infinitiumsolutions.com:9599/IMS2SONERIPKWS/api/services/CardEnrollmentWS.wsdl'])">uatSONERIPK ↗↗↗</button></div>
+        </div>
+      </div>
+      <div class="card-group">
+        <div class="group-label">app9 — 161.14 (CIMB)</div>
+        <div class="card-grid">
+          <div class="lcard-multi"><button onclick="openMultipleTabs(['https://uatcimb.infinitiumsolutions.com/IMS2CIMBMYCMS/login','https://uat-cimb-securee-pay.cimb.com/IMS2CIMBMYACS/api/3d2/simulator/'])">uatCIMBMY ↗↗</button></div>
+          <div class="lcard-multi"><button onclick="openMultipleTabs(['https://uatcimb.infinitiumsolutions.com/IMS2CIMBSGCMS/login','https://uat-cimb-securee-pay.cimb.com/IMS2CIMBSGACS/api/3d2/simulator/'])">uatCIMBSG ↗↗</button></div>
+          <div class="lcard-multi"><button onclick="openMultipleTabs(['https://uatcimb.infinitiumsolutions.com/IMS2CIMBMYSITCMS/login'])">uatCIMBMYSIT ↗</button></div>
+        </div>
+      </div>
+      <div class="card-group">
+        <div class="group-label">imsapp20 — 161.36 (AUTOTEST)</div>
+        <div class="card-grid">
+          <div class="lcard-multi"><button onclick="openMultipleTabs(['https://ims2test2.infinitiumsolutions.com/IMS2AUTOTESTCMS2/login','https://ims2test2.infinitiumsolutions.com/IMS2AUTOTESTCMS2/api/3d2/simulator/'])">IMS2AUTOTEST ↗↗</button></div>
+        </div>
+      </div>
+      <div class="card-group">
+        <div class="group-label">Authenticator UAT</div>
+        <div class="card-grid">
+          <div class="lcard" title="podman · 192.168.161.10"><a href="https://imsauthenticatorqasit.infinitiumsolutions.com/cms/" target="_blank">QA SIT_IMAP</a></div>
+          <div class="lcard" title="podman · 192.168.161.62"><a href="https://imsauthenticatoruat.infinitiumsolutions.com/cms/" target="_blank">UAT_IMAP</a></div>
+          <div class="lcard"><a href="https://imsauthenticatorcimbuat.infinitiumsolutions.com/cms/login" target="_blank">CIMB_UAT_IMAP</a></div>
+        </div>
+      </div>
+      <div class="card-group">
+        <div class="group-label">BSN UAT IMX / 2FA</div>
+        <div class="card-grid">
+          <div class="lcard" title="192.168.161.38"><a href="https://imxuat.infinitiumsolutions.com/imx/login" target="_blank">BSN imx</a></div>
+          <div class="lcard" title="192.168.166.10"><a href="https://ims2fa-uat.infinitiumsolutions.com/" target="_blank">BSN 2fa</a></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── IMAP ── -->
+    <div id="panel-imap" class="panel">
+      <div class="panel-header">
+        <span class="panel-title">IMAP</span>
+      </div>
+      <div class="card-group">
+        <div class="group-label">AWS Login</div>
+        <div class="card-grid">
+          <div class="lcard"><a href="https://infinitiumsso.awsapps.com/start" target="_blank">AWS SSO</a></div>
+        </div>
+      </div>
+      <div class="card-group">
+        <div class="group-label">ON-PREM = PROD</div>
+        <div class="card-grid">
+          <div class="lcard" title="MY-AGROMY · ON-prem=PROD · hosted at cx/my"><a href="https://imsauthenticator.infinitium.com/cms/" target="_blank">AGROMY</a></div>
+          <div class="lcard" title="IDN-HLBMY · ON-prem=PROD · hosted at dci/idn"><a href="https://imsauthenticatorid.infinitium.com/cms/" target="_blank">HLBMY</a></div>
+        </div>
+      </div>
+      <div class="card-group">
+        <div class="group-label">AWS ECS — IMAP Shared</div>
+        <div class="card-grid">
+          <div class="lcard" title="Both banks share same URL · hosted at cloud (AWS)"><a href="https://imsauthenticatormy.infinitium.com/cms/login" target="_blank">AMBANK / RHBMY</a></div>
+          <div class="lcard" title="Check IMAP apigw error code except 201/200"><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/data-explorer/discover/#?_g=(filters:!(),refreshInterval:(pause:!f,value:30000),time:(from:now%2Fd,to:now%2Fd))&_a=(discover:(columns:!(remain_message,transactionID,response_code,event.original),interval:auto,isDirty:!t,sort:!()),metadata:(indexPattern:'5767f540-3391-11ef-bba6-972ab7ae9901',view:discover))&_q=(filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'5767f540-3391-11ef-bba6-972ab7ae9901',key:response_code,negate:!t,params:(query:200),type:phrase),query:(match_phrase:(response_code:200))),('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'5767f540-3391-11ef-bba6-972ab7ae9901',key:response_code,negate:!t,params:(query:201),type:phrase),query:(match_phrase:(response_code:201)))),query:(language:kuery,query:'(name%20:%20*AMBANK*)%20or%20(tags%20:%20(container)%20and%20rawrequest%20:%20(*ambank*))' ))" target="_blank">AMBANK apigw ELK</a></div>
+        </div>
+      </div>
+      <div class="card-group">
+        <div class="group-label">AWS EC2</div>
+        <div class="card-grid">
+          <div class="lcard" title="CIMB · hosted at cloud (AWS)"><a href="https://imsauthenticatorcimb.infinitium.com/cms/login" target="_blank">CIMB</a></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── REPORTS ── -->
+    <div id="panel-report" class="panel">
+      <div class="panel-header"><span class="panel-title">Reports</span></div>
+      <div class="card-group">
+        <div class="group-label">IMX-BSNMY Billing Report</div>
+        <div class="card-grid">
+          <div class="lcard"><a href="https://happyrewardsapp.bsnhappyrewards.com.my/imx/login" target="_blank">BSN IMX</a></div>
+        </div>
+      </div>
+      <div class="card-group">
+        <div class="group-label">2FA Report</div>
+        <div class="card-grid">
+          <div class="lcard" title="Enable FortiClient"><a href="https://2fa.infinitium.com/loginPage" target="_blank">2FA</a></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SFTP ── -->
+    <div id="panel-sftp" class="panel">
+      <div class="panel-header"><span class="panel-title">SFTP</span></div>
+      <div class="inner-tabs">
+        <button class="inner-tab" onclick="showInner('sftp','sftp-dk',this)">DK SFTP</button>
+        <button class="inner-tab" onclick="showInner('sftp','sftp-csr',this)">UAT CSR</button>
+      </div>
+      <div id="sftp-dk" class="inner-panel">
+        <div class="inner-tabs">
+          <button class="inner-tab" onclick="showInner('sftp-dk','sftp-exp',this)">Explanation</button>
+          <button class="inner-tab" onclick="showInner('sftp-dk','sftp-path',this)">Paths</button>
+        </div>
+        <div id="sftp-exp" class="inner-panel">
+          <p style="color:var(--text-muted);font-size:13px;margin-bottom:16px;">Migrating SFTP from Windows-based to Linux-based. Currently active SFTP servers in MY environment:</p>
+          <div class="elk-list">
+            <div class="elk-item"><a href="https://103.135.43.78/nagios/cgi-bin/status.cgi?host=cxinfsftp1a.cx.infinitium.com" target="_blank">linux SFTP – cxinfsftp1a</a><span class="elk-desc">192.168.60.19 — PROD</span></div>
+            <div class="elk-item"><a href="https://103.135.43.78/nagios/cgi-bin/extinfo.cgi?type=1&host=svinfsftp1b.infinitium.com" target="_blank">linux SFTP – svinfsftp1b</a><span class="elk-desc">192.168.20.12 — DR</span></div>
+            <div class="elk-item"><a href="https://103.135.43.78/nagios/cgi-bin/status.cgi?host=myinfsftp1a.cx.infinitium.com" target="_blank">windows SFTP – myinfsftp1a</a><span class="elk-desc">192.168.60.9 — PROD</span></div>
+            <div class="elk-item"><a href="https://103.135.43.78/nagios/cgi-bin/extinfo.cgi?type=1&host=sginfftp1a.savvis.infinitium.com" target="_blank">windows SFTP – sginfftp1a</a><span class="elk-desc">192.168.20.2 — DR</span></div>
+            <div class="elk-item"><span style="color:var(--text-muted);font-family:var(--mono);font-size:12px;">ERM2 – cxims2erm2</span><span class="elk-desc">192.168.63.118 — PROD</span></div>
+            <div class="elk-item"><span style="color:var(--text-muted);font-family:var(--mono);font-size:12px;">ERM2 – svims2erm2-dr</span><span class="elk-desc">192.168.21.154 — DR</span></div>
+            <div class="elk-item"><a href="https://infinitium.atlassian.net/wiki/spaces/IssuerTeam/pages/1790377996/IMS+Bank+Details+ID+MY+and+SG#IMS-SFTP-Enrolment-Schedule" target="_blank">Enrolment Schedule</a><span class="elk-desc">Check enrolment timing on Confluence</span></div>
+          </div>
+          <div class="divider"></div>
+          <p style="font-size:13px;color:var(--text-muted);line-height:1.8;">
+            SFTP servers = <strong style="color:var(--text)">transit servers</strong> — banks send/receive files.<br>
+            ERM servers = <strong style="color:var(--text)">processing servers</strong> — enrolment files processed before transfer.<br><br>
+            <span class="animated-fade" title="Bank1&#10;Bank2&#10;Bank3">PUSH ⬅️ 📦</span> = Banks push files to INF server (INF server ↔ Bank client)<br>
+            <span class="animated-fade" title="AEONCREDIT · AFFIN · AMBANK(MBF) · BKRM · HLB · RHBMY · RHBKH">PULL 🪝</span> = We pull files from banks (INF client ↔ Bank server)
+          </p>
+        </div>
+        <div id="sftp-path" class="inner-panel">
+          <div class="code-block">
+            <pre>
+<b>cd /SECURE</b>          — Enrolment folders &amp; files
+<b>cd /etc/sftp</b>        — Bash script files
+<b>cd /etc/ssh</b>         — .pem private keys for pull banks
+<b>cd /var/log/sftp</b>    — Upload/download automation logs
+
+<b>sudo crontab -e</b>     — Edit cronjob
+<b>sudo crontab -l</b>     — List &amp; view cronjobs
+<b>sudo ./etc/sftp/telnet_pull_banks.sh</b>  — Telnet to pull banks
+            </pre>
+          </div>
+        </div>
+      </div>
+      <div id="sftp-csr" class="inner-panel">
+        <div class="maintenance">
+          <span>🚧 UNDER MAINTENANCE</span>
+          <span style="font-size:11px;color:var(--text-dim)">Will add soon.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CMB ── -->
+    <div id="panel-cmb" class="panel">
+      <div class="panel-header"><span class="panel-title">Change Management Board</span></div>
+      <div class="card-grid">
+        <div class="lcard"><a href="https://eeft.sharepoint.com/sites/ChangeRequestSubmission" target="_blank">Sharepoint</a></div>
+        <div class="lcard"><a href="https://infinitium.atlassian.net/jira/software/c/projects/CMB/boards/533?useStoredSettings=true" target="_blank">CMB Board</a></div>
+        <div class="lcard"><a href="https://infinitium.atlassian.net/jira/software/c/projects/CM/boards/551" target="_blank">CM Board</a></div>
+        <div class="lcard"><a href="https://certlogik.com/decoder/" target="_blank">CSR Decoder</a></div>
+      </div>
+    </div>
+
+    <!-- ── DEVOPS ── -->
+    <div id="panel-devops" class="panel">
+      <div class="panel-header"><span class="panel-title">DevOps</span></div>
+      <div class="card-group">
+        <div class="group-label">Ansible / Git</div>
+        <div class="card-grid">
+          <div class="lcard"><a href="https://devops-awx.infinitiumsolutions.com/#/login" target="_blank">UAT Ansible</a></div>
+          <div class="lcard"><a href="https://svansibletower.infinitium.com/#/login" target="_blank">Prod Ansible MYSG</a></div>
+          <div class="lcard"><a href="https://dciansibletower.infinitium.com/#/login" target="_blank">Prod Ansible IDN</a></div>
+          <div class="lcard"><a href="https://192.168.65.141/designer/ims" target="_blank">Git Designer</a></div>
+          <div class="lcard"><a href="https://192.168.65.141/automation/ansible/-/tree/master/ims2?ref_type=heads" target="_blank">Git IMS2</a></div>
+          <div class="lcard"><a href="https://eeft.sharepoint.com/sites/Designer/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FDesigner%2FShared%20Documents%2FIMS%2FIMS2%2FIMS2%5FOCBCMY%2FRelease%20Patch&viewid=042fe251%2D75b8%2D4861%2D9879%2D4b35093471c0&p=true" target="_blank">Designer Sharepoint</a></div>
+          <div class="lcard" title="Open with FortiClient"><a href="https://devops.infinitiumsolutions.com/cert-management/cmverify.html" target="_blank">Prod Cert Checker</a></div>
+          <div class="lcard" title="Open with FortiClient"><a href="https://solarwinds.infinitiumsolutions.com:8124/iwc/login.iwc" target="_blank">SolarWinds</a></div>
+        </div>
+      </div>
+      <div class="card-group">
+        <div class="group-label">UAT Auto-Patching</div>
+        <div class="card-grid">
+          <div class="lcard-multi"><button onclick="openMultipleTabs(['https://infinitium.atlassian.net/wiki/spaces/IssuerTeam/pages/1151172772/Patching+OTP+Template','https://infinitium.atlassian.net/browse/IMSTEAM-2070','https://devops-awx.infinitiumsolutions.com/#/jobs'])">OTP Patching ↗↗↗</button></div>
+        </div>
+      </div>
+      <div class="card-group">
+        <div class="group-label">IMS Developer</div>
+        <div class="card-grid">
+          <div class="lcard"><a href="https://infinitium.atlassian.net/wiki/spaces/I/pages/2946007042/IMS2+Release+V2.2.0.17" target="_blank">Confluence</a></div>
+          <div class="lcard"><a href="https://eeft.sharepoint.com/sites/SoftwareEngineering_a15ce/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FSoftwareEngineering%5Fa15ce%2FShared%20Documents%2FIssuer%20Team%2FIMS2%2FIMS2%2E0%20%2D%20Release%2FPatches&sortField=Modified&isAscending=false" target="_blank">Release Patches</a></div>
+          <div class="lcard"><a href="https://eeft.sharepoint.com/sites/SoftwareEngineering_a15ce/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FSoftwareEngineering%5Fa15ce%2FShared%20Documents%2FIssuer%20Team%2FIMS2%2FIMS2%2E0%20%2D%20Release%2FHotfixes&sortField=Modified&isAscending=false" target="_blank">Hotfixes</a></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── ELK ── -->
+    <div id="panel-elk" class="panel">
+      <div class="panel-header">
+        <span class="panel-title">OpenSearch / ELK</span>
+        <span style="font-size:12px;color:var(--text-muted);margin-left:8px;">adjust queries as needed</span>
+      </div>
+      <div class="elk-list">
+        <div class="elk-item"><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/dashboards#/view/93a827f0-9110-11ef-8ba2-e5fb86697e45?_g=(filters:!(),refreshInterval:(pause:!f,value:30000),time:(from:now-5m,to:now))" target="_blank">FDS Dashboard</a><span class="elk-desc">RBA on TM and FDS monitoring</span></div>
+        <div class="elk-item"><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!f,value:30000),time:(from:now%2Fd,to:now%2Fd))&_a=(columns:!(host.hostname,remain_message,tags,transactionID),filters:!(),index:'6cbd7240-4af2-11ee-8ba2-e5fb86697e45',interval:auto,query:(language:kuery,query:'remain_message:%20exception%20and%20tags:%20ims2cimbmy'),sort:!())" target="_blank">Exception</a><span class="elk-desc">Check exception from app server log</span></div>
+        <div class="elk-item"><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!f,value:5000),time:(from:now%2Fd,to:now%2Fd))&_a=(columns:!(remain_message,log.file.path,host.name),filters:!(),index:'6cbd7240-4af2-11ee-8ba2-e5fb86697e45',interval:auto,query:(language:kuery,query:'tags.keyword%20:%20%22ims2bkrmmy%22%20and%20remain_message%20:%20*JDBC*'),sort:!())" target="_blank">Check DB Connection (JDBC)</a><span class="elk-desc">Check database connection issues</span></div>
+        <div class="elk-item"><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!f,value:5000),time:(from:now-4d,to:now))&_a=(columns:!(remain_message,log.file.path,host.name),filters:!(),index:'6cbd7240-4af2-11ee-8ba2-e5fb86697e45',interval:auto,query:(language:kuery,query:'tags.keyword%20:%20%22ims2affinmy%22%20and%20remain_message%20:%20*QuartzEnrollmentJob*%0A'),sort:!())" target="_blank">Enrolment Cronjob</a><span class="elk-desc">Monitor enrolment cronjob status</span></div>
+        <div class="elk-item"><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!f,value:5000),time:(from:now%2Fd,to:now%2Fd))&_a=(columns:!(remain_message,log.file.path,host.name),filters:!(),index:'6cbd7240-4af2-11ee-8ba2-e5fb86697e45',interval:auto,query:(language:kuery,query:'tags.keyword%20:%20%22ims2affinmy%22%20and%20remain_message%20:%20*QuartzETLJob*%0A'),sort:!())" target="_blank">ETL Job Status</a><span class="elk-desc">Check ETL jobs — runs once per day</span></div>
+        <div class="elk-item"><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!f,value:5000),time:(from:now%2Fd,to:now%2Fd))&_a=(columns:!(remain_message,log.file.path,host.name),filters:!(),index:'6cbd7240-4af2-11ee-8ba2-e5fb86697e45',interval:auto,query:(language:kuery,query:'log.file.path%20:%20*BIMY*%20and%20remain_message%20:%20*1302**'),sort:!())" target="_blank">OTP Success Rate</a><span class="elk-desc">Filter success rate for OTP (1302 = Challenge OTP)</span></div>
+        <div class="elk-item"><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!f,value:30000),time:(from:'2025-05-01T05:00:00.000Z',to:now))&_a=(columns:!(host.hostname,remain_message,tags,transactionID),filters:!(),index:'6cbd7240-4af2-11ee-8ba2-e5fb86697e45',interval:auto,query:(language:kuery,query:'remain_message:%20*112.78.177.40*%20and%20tags.keyword%20:%20*ims2bcaid*'),sort:!())" target="_blank">Transaction by IP</a><span class="elk-desc">Search transaction by IP — usually ITSec request</span></div>
+        <div class="elk-item"><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/discover?#/?_g=(filters:!(),refreshInterval:(pause:!f,value:10000),time:(from:now%2Fd,to:now%2Fd))&_a=(columns:!(request,response_code,upstream_response_time),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'5767f540-3391-11ef-bba6-972ab7ae9901',key:response_code,negate:!t,params:(query:200),type:phrase),query:(match_phrase:(response_code:200)))),index:'5767f540-3391-11ef-bba6-972ab7ae9901',interval:auto,query:(language:kuery,query:'request:%20*infobip*'),sort:!())" target="_blank">Exception INFOBIP</a><span class="elk-desc">Check Infobip delivery errors</span></div>
+        <div class="elk-item"><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/discover?#/?_g=(filters:!(),refreshInterval:(pause:!f,value:10000),time:(from:now-7d,to:now))&_a=(columns:!(request,response_code,upstream_response_time),filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'5767f540-3391-11ef-bba6-972ab7ae9901',key:response_code,negate:!t,params:(query:200),type:phrase),query:(match_phrase:(response_code:200)))),index:'5767f540-3391-11ef-bba6-972ab7ae9901',interval:auto,query:(language:kuery,query:'request:%20*macrokiosk*'),sort:!())" target="_blank">Exception MacroKiosk</a><span class="elk-desc">Check MacroKiosk delivery errors</span></div>
+        <div class="elk-item"><a href="https://infinitium.atlassian.net/wiki/spaces/IssuerTeam/pages/1144324686/KIBANA+Query" target="_blank">Query in Confluence</a><span class="elk-desc">By Abg Ensem — compiled Kibana queries</span></div>
+        <div class="elk-item"><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/data-explorer/discover/#?_g=(filters:!(),refreshInterval:(pause:!f,value:5000),time:(from:now%2Fd,to:now%2Fd))&_a=(discover:(columns:!(log.file.path,host.name,response_code),interval:auto,sort:!()),metadata:(indexPattern:'5767f540-3391-11ef-bba6-972ab7ae9901',view:discover))" target="_blank">BANK ACS Access Log 200</a><span class="elk-desc">Check ACS access log — useful during CERT RENEWAL</span></div>
+        <div class="elk-item"><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/data-explorer/discover/#?_g=(filters:!(),refreshInterval:(pause:!f,value:30000),time:(from:now%2Fd,to:now%2Fd))" target="_blank">MBBSG API Issue</a><span class="elk-desc">Check MBBSG apigw errors/responses</span></div>
+        <div class="elk-item"><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/data-explorer/discover/#" target="_blank">TransactionID ELK Search</a><span class="elk-desc">Check exception by transactionID</span></div>
+        <div class="elk-item"><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/data-explorer/discover/#" target="_blank">apigw CIMB</a><span class="elk-desc">Check apigw/cimb response code — for NOC escalation on non-200</span></div>
+        <div class="elk-item"><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/data-explorer/discover/#" target="_blank">IMAP Resend Request</a><span class="elk-desc">Check resend request for OOB — get transID, check in CMS</span></div>
+        <div class="elk-item"><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/data-explorer/discover/#" target="_blank">High Resend SMS</a><span class="elk-desc">Check high SMS resend — check banks, escalate SMSC if many</span></div>
+        <div class="elk-item"><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/data-explorer/discover/#" target="_blank">Reverse Proxy</a><span class="elk-desc">Check reverse proxy logs</span></div>
+        <div class="elk-item"><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/data-explorer/discover#" target="_blank">LDAP Issue</a><span class="elk-desc">Check LDAP if CMS unable to login with valid credentials</span></div>
+        <div class="elk-item"><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/data-explorer/discover/#" target="_blank">IMS2 Nginx Access Log Error Code</a><span class="elk-desc">Check response code errors on access log</span></div>
+        <div class="elk-item"><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/data-explorer/discover/#" target="_blank">IMAP Nginx Access Log Error Code</a><span class="elk-desc">Check RP error codes for IMSAUTHCIMBMY</span></div>
+        <div class="elk-item"><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/data-explorer/discover/#" target="_blank">Incoming OOB Checking</a><span class="elk-desc">Check OOB success transactions — fine-tune BANK name accordingly</span></div>
+        <div class="elk-item"><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/data-explorer/discover/#" target="_blank">Incoming SMS OTP Checking</a><span class="elk-desc">Check SMS OTP success transactions</span></div>
+        <div class="elk-item"><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/data-explorer/discover/#" target="_blank">Incoming SMS OTP &amp; OOB</a><span class="elk-desc">Check both SMS OTP and OOB success trx</span></div>
+        <div class="elk-item"><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/data-explorer/discover/#" target="_blank">Incoming Unsuccessful Transaction</a><span class="elk-desc">Check incoming unsuccessful transactions</span></div>
+        <div class="elk-item"><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/data-explorer/discover/#" target="_blank">Incoming CReq</a><span class="elk-desc">Check incoming CReq — fine-tune BANK name accordingly</span></div>
+      </div>
+    </div>
+
+    <!-- ── CERT ── -->
+    <div id="panel-cert" class="panel">
+      <div class="panel-header"><span class="panel-title">CERT Renewal</span></div>
+      <div class="url-builder">
+        <input type="text" id="hostInput" placeholder="Enter host (e.g. 3dsecure.bibd.com.bn)">
+        <select id="portSelect">
+          <option value="443">443 — ACS</option>
+          <option value="9700">9700 — Visa</option>
+          <option value="9701">9701 — Mastercard</option>
+          <option value="9800">9800 — MyDebit</option>
+        </select>
+        <button class="btn-go" onclick="openCustomUrl()">GO →</button>
+      </div>
+      <div class="card-grid" style="margin-bottom:20px;">
+        <div class="lcard" title="Open with FortiClient"><a href="https://devops.infinitiumsolutions.com/cert-management/cmverify.html" target="_blank">Prod Signed Cert Checker</a></div>
+        <div class="lcard"><a href="https://certlogik.com/decoder/" target="_blank">CSR Decoder</a></div>
+      </div>
+      <div class="info-container">
+        <div class="info-icon" onclick="toggleGuide()">ℹ</div>
+        <div id="certGuide" class="info-popup">
+          <strong>CERT RENEWAL ACTIVITY GUIDE</strong><br><br>
+          <u>Pre-check</u><br>
+          • Email ITSec with attached ZIP (leaf, CA-ROOT, key).<br>
+          • Upload cert &amp; key to relevant directory before activity starts.<br><br>
+          <u>30 mins before</u><br>
+          • Communicate in WA group &amp; send email 15–30 min before start.<br>
+          • Inform ITSec to upload cert on their site (F5).<br>
+          • IMS can do cert renewal in DR first.<br>
+          • Once ITSec finishes upload, proceed with PROD cert renewal.<br><br>
+          <u>Activity end</u><br>
+          • Check new cert once ITSec uploads.<br>
+          • After PROD renewal, monitor transactions.<br>
+          • Inform WA group &amp; send email with cert expiry + CMS trx screenshot.<br><br>
+          <u>Post-check</u><br>
+          • Ask NOC to check relevant cert on Nagios monitoring.<br>
+          • Upload cert screenshot &amp; directory path in CMB ticket including:<br>
+          &nbsp;&nbsp;– ACS access log link<br>
+          &nbsp;&nbsp;– Cert in directory screenshot<br>
+          &nbsp;&nbsp;– Latest transaction screenshot<br>
+          &nbsp;&nbsp;– Complete email PDF<br>
+          &nbsp;&nbsp;– ITSec F5 screenshot<br>
+          &nbsp;&nbsp;– New cert viewer screenshot
+        </div>
+      </div>
+    </div>
+
+    <!-- ── LINUX ── -->
+    <div id="panel-linux" class="panel">
+      <div class="panel-header"><span class="panel-title">Codes &amp; Commands</span></div>
+      <div class="inner-tabs">
+        <button class="inner-tab" onclick="showInner('linux','linux-basic',this)">Basic</button>
+        <button class="inner-tab" onclick="showInner('linux','linux-systemctl',this)">Systemctl</button>
+        <button class="inner-tab" onclick="showInner('linux','linux-podman',this)">Podman</button>
+        <button class="inner-tab" onclick="showInner('linux','linux-cron',this)">Cron</button>
+        <button class="inner-tab" onclick="showInner('linux','linux-aws',this)">AWS CLI</button>
+        <button class="inner-tab" onclick="showInner('linux','linux-octal',this)">Octal</button>
+        <button class="inner-tab" onclick="showInner('linux','linux-currency',this)">Currency Codes</button>
+        <button class="inner-tab" onclick="showInner('linux','linux-sql',this)">SQL</button>
+      </div>
+      <div id="linux-basic" class="inner-panel"><div class="code-block"><pre>
+<b>BASIC LINUX COMMANDS</b>
+─────────────────────────────────────────────────────────────────────────────
+ls                                                  List files and directories
+cd [dir]                                            Change directory
+pwd                                                 Print current directory path
+mkdir [dir]                                         Create new directory
+rm [file]                                           Delete file
+rm -r [dir]                                         Delete directory recursively
+cp [src] [dest]                                     Copy file or folder
+mv [src] [dest]                                     Move or rename files
+vi [file]                                           Create/edit a file
+cat [file]                                          Show contents of a file
+scp /path/to/localfile user@host:/path/to/dest      Secured copy to another server
+chmod [perm] [file]                                 Change file permissions
+chown [user] [file]                                 Change file ownership
+df -h                                               Show disk usage
+du -sh [dir]                                        Show space used by a directory
+du -sh [dir] | sort -htr                            Show space used, sort highest at bottom
+top                                                 Show running processes
+ps aux                                              List all processes
+kill [pid]                                          Kill a process by PID
+history                                             Show command history
+clear                                               Clear terminal screen
+ifconfig / ip a                                     Show IP addresses
+ping [host]                                         Check network connectivity
+whoami                                              Show current user
+uptime                                              Show system uptime
+find / -type f -name "*xyz"                         Find filename "xyz" on directory /
+:%s/<b>ToBeReplace</b>/<b>NewName</b>/gc                          vi: find and rename string
+journalctl -u sshd --since "2025-08-20 00:00:00" --until "2025-08-20 23:59:59"
+                                                    Check sshd log for particular date
+sudo grep abmb_sftp /var/log/secure                 Check if user logged in to server
+journalctl -u sshd | grep "103.131.143.23"          Search all SSH logs for an IP
+journalctl -u sshd --since "2025-08-20" | grep -c "103.131.143.23"
+                                                    Count how many times an IP appears
+      </pre></div></div>
+      <div id="linux-systemctl" class="inner-panel"><div class="code-block"><pre>
+<b>SYSTEMCTL COMMANDS</b>
+─────────────────────────────────────────────────────────────────────
+systemctl status nginx                   Show status of nginx service
+systemctl start nginx                    Start nginx service
+systemctl stop nginx                     Stop nginx service
+systemctl restart nginx                  Restart nginx service
+systemctl enable nginx                   Enable service at boot
+systemctl disable nginx                  Disable service at boot
+systemctl is-active nginx                Check if service is active
+systemctl is-enabled nginx               Check if service is enabled
+systemctl list-units --type=service      List active services
+systemctl list-units --type=service --state=running   List running services
+journalctl -u nginx                      View logs for nginx service
+      </pre></div></div>
+      <div id="linux-podman" class="inner-panel"><div class="code-block"><pre>
+<b>PODMAN COMMANDS</b>
+─────────────────────────────────────────────────────────────────────
+podman ps                                Show running containers
+podman ps -a                             Show all containers
+podman start [container]                 Start container
+podman stop [container]                  Stop container
+podman restart [container]               Restart container
+podman rm [container]                    Remove container
+podman rmi [image]                       Remove image
+podman images                            List images
+podman pull [image]                      Download image from registry
+podman run -it [image] /bin/bash         Run container interactively
+podman logs [container]                  Show container logs
+podman exec -it [container] /bin/bash    Exec into running container
+      </pre></div></div>
+      <div id="linux-cron" class="inner-panel"><div class="code-block"><pre>
+<b>CRON EXPRESSION REFERENCE</b>
+─────────────────────────────────────────────────────────────────────
+* * * * *                     Run every minute
+*/5 * * * *                   Run every 5 minutes
+0 * * * *                     Run at minute 0 (every hour)
+0 0 * * *                     Run daily at midnight
+0 8 * * *                     Run daily at 8:00 AM
+0 18 * * *                    Run daily at 6:00 PM
+0 0 * * 0                     Run every Sunday at midnight
+0 0 1 * *                     Run on the 1st of every month at midnight
+0 0 1 1 *                     Run once a year on Jan 1st at midnight
+0 10,40 8,13,18 * *           Run at 8:10, 8:40, 13:10, 13:40, 18:10, 18:40
+0 */2 * * *                   Run every 2 hours
+0 0-6/2 * * *                 Run every 2 hours between 12AM and 6AM
+15 14 1 * *                   Run at 2:15 PM on the 1st of every month
+@reboot                       Run once at startup
+@daily                        Same as 0 0 * * *
+@hourly                       Same as 0 * * * *
+
+<b>FIELD ORDER:</b>  Minutes  Hours  Day-of-month  Month  Day-of-week
+      </pre></div></div>
+      <div id="linux-aws" class="inner-panel"><div class="code-block"><pre>
+<b>AWS ECS COMMANDS</b>
+─────────────────────────────────────────────────────────────────────────────────────────
+aws ecs list-clusters
+aws ecs list-services --cluster cmu-sg-ims2-uat-cluster
+aws ecs describe-services --cluster cmu-sg-ims2-uat-cluster --services my-svc
+aws ecs list-tasks --cluster cmu-sg-ims2-uat-cluster --service-name my-svc
+aws ecs update-service --cluster cmu-sg-ims2-uat-cluster \
+    --service ims2-cimbmyuat-acs-service --desired-count 1
+aws ecs describe-tasks --cluster cmu-sg-ims2-uat-cluster --tasks &lt;taskArn&gt;
+
+<b># List all services with status and counts</b>
+for svc in $(aws ecs list-services --cluster cmu-sg-ims2-uat-cluster \
+  --query 'serviceArns[]' --output text); do
+  aws ecs describe-services --cluster cmu-sg-ims2-uat-cluster \
+    --services $(basename $svc) \
+    --query 'services[*].{Name:serviceName,Status:status,Desired:desiredCount,Running:runningCount}' \
+    --output table
+done
+
+<b>AWS CRON EXPRESSIONS</b>
+─────────────────────────────────────────────────────────────────────────────────────────
+cron(0 8 ? * 2-6 *)      Mon–Fri 08:00 UTC = 4:00 PM Malaysia Time
+cron(0 2 ? * 2-6 *)      Mon–Fri 02:00 UTC = 10:00 AM Malaysia Time
+cron(0 14 ? * 2-6 *)     Mon–Fri 14:00 UTC = 10:00 PM Malaysia Time
+Field: Minutes Hours Day-of-month Month Day-of-week Year
+
+<b>CIMB API UAT CURL — SG</b>
+─────────────────────────────────────────────────────────────────────────────────────────
+curl -v "https://uat-api.infinitium.com/api/cimb/sg"
+curl -I "https://uat-api.infinitium.com/api/cimb/sg"
+curl -k -v -w "%{http_code}\n" "https://uat-api.infinitium.com/api/cimb/sg"
+curl -v "https://api-bkp-uat.cimb.com/sg/cimb/partner/v1/card/cif?cif=12345"
+
+<b>CIMB API UAT CURL — MY</b>
+─────────────────────────────────────────────────────────────────────────────────────────
+curl -v "https://uat-api.infinitium.com/api/cimb/my"
+curl -I "https://uat-api.infinitium.com/api/cimb/my"
+curl -k -v -w "%{http_code}\n" "https://uat-api.infinitium.com/api/cimb/my"
+curl -v "https://api-bkp-uat.cimb.com/my/cimb/partner/v1/card/cif?cif=12345"
+      </pre></div></div>
+      <div id="linux-octal" class="inner-panel"><div class="code-block"><pre>
+<b>OCTAL CHMOD REFERENCE</b>
+─────────────────────────────────────────────────────────
+Value  Permission  Meaning
+0      ---         No permission
+1      --x         Execute only
+2      -w-         Write only
+3      -wx         Write and execute
+4      r--         Read only
+5      r-x         Read and execute
+6      rw-         Read and write
+7      rwx         Read, write, and execute
+
+<b>COMMON EXAMPLES</b>
+─────────────────────────────────────────────────────────
+644    rw-r--r--   Owner: rw | Group: r | Others: r
+600    rw-------   Owner: rw | Group: — | Others: —
+755    rwxr-xr-x   Owner: rwx | Group: rx | Others: rx
+700    rwx------   Owner: rwx | Group: — | Others: —
+775    rwxrwxr-x   Owner: rwx | Group: rwx | Others: rx
+777    rwxrwxrwx   Everyone has full permission
+750    rwxr-x---   Owner: rwx | Group: rx | Others: —
+
+Each digit = 4(r) + 2(w) + 1(x) for User | Group | Others
+      </pre></div></div>
+      <div id="linux-currency" class="inner-panel">
+        <table>
+          <thead><tr><th>Country</th><th>Currency</th><th>Code</th><th>Numeric</th></tr></thead>
+          <tbody>
+            <tr><td>🇲🇾 Malaysia</td><td>Malaysian Ringgit</td><td>MYR</td><td>458</td></tr>
+            <tr><td>🇸🇬 Singapore</td><td>Singapore Dollar</td><td>SGD</td><td>702</td></tr>
+            <tr><td>🇺🇸 United States</td><td>US Dollar</td><td>USD</td><td>840</td></tr>
+            <tr><td>🇪🇺 Eurozone</td><td>Euro</td><td>EUR</td><td>978</td></tr>
+            <tr><td>🇬🇧 United Kingdom</td><td>Pound Sterling</td><td>GBP</td><td>826</td></tr>
+            <tr><td>🇯🇵 Japan</td><td>Japanese Yen</td><td>JPY</td><td>392</td></tr>
+            <tr><td>🇨🇳 China</td><td>Yuan Renminbi</td><td>CNY</td><td>156</td></tr>
+            <tr><td>🇨🇭 Switzerland</td><td>Swiss Franc</td><td>CHF</td><td>756</td></tr>
+            <tr><td>🇨🇦 Canada</td><td>Canadian Dollar</td><td>CAD</td><td>124</td></tr>
+            <tr><td>🇦🇺 Australia</td><td>Australian Dollar</td><td>AUD</td><td>036</td></tr>
+            <tr><td>🇭🇰 Hong Kong</td><td>Hong Kong Dollar</td><td>HKD</td><td>344</td></tr>
+            <tr><td>🇮🇳 India</td><td>Indian Rupee</td><td>INR</td><td>356</td></tr>
+            <tr><td>🇰🇷 South Korea</td><td>South Korean Won</td><td>KRW</td><td>410</td></tr>
+            <tr><td>🇸🇦 Saudi Arabia</td><td>Saudi Riyal</td><td>SAR</td><td>682</td></tr>
+            <tr><td>🇦🇪 UAE</td><td>UAE Dirham</td><td>AED</td><td>784</td></tr>
+            <tr><td>🇹🇭 Thailand</td><td>Thai Baht</td><td>THB</td><td>764</td></tr>
+            <tr><td>🇵🇭 Philippines</td><td>Philippine Peso</td><td>PHP</td><td>608</td></tr>
+            <tr><td>🇮🇩 Indonesia</td><td>Indonesian Rupiah</td><td>IDR</td><td>360</td></tr>
+            <tr><td>🇿🇦 South Africa</td><td>South African Rand</td><td>ZAR</td><td>710</td></tr>
+            <tr><td>🇧🇷 Brazil</td><td>Brazilian Real</td><td>BRL</td><td>986</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div id="linux-sql" class="inner-panel"><div class="code-block"><pre>
+<b>SQL / POSTGRESQL REFERENCE</b>
+─────────────────────────────────────────────────────────────────────────────
+SELECT version();
+SELECT * FROM dbo.systemsetting WHERE systemname LIKE '%VERSION';
+SELECT datname FROM pg_database;
+\c database_name;
+SELECT current_database();
+SELECT current_user;
+SELECT schema_name FROM information_schema.schemata;
+SELECT table_name FROM information_schema.tables WHERE table_schema = 'public';
+
+<b>Table structure</b>
+SELECT column_name, data_type, is_nullable
+FROM information_schema.columns WHERE table_name = 'table_name';
+
+SELECT COUNT(*) FROM table_name;
+SELECT * FROM table_name ORDER BY created_date DESC LIMIT 10;
+
+<b>Active sessions</b>
+SELECT pid, usename, datname, client_addr, state, query
+FROM pg_stat_activity WHERE state = 'active';
+
+<b>Long-running queries</b>
+SELECT pid, now() - query_start AS duration, query
+FROM pg_stat_activity WHERE state = 'active' ORDER BY duration DESC;
+
+SELECT pg_terminate_backend(pid);          -- Kill a session (careful!)
+SELECT pg_size_pretty(pg_database_size('database_name'));
+SELECT pg_size_pretty(pg_total_relation_size('table_name'));
+
+<b>Index usage</b>
+SELECT relname, idx_scan, idx_tup_read, idx_tup_fetch
+FROM pg_stat_user_indexes WHERE relname = 'table_name';
+      </pre></div></div>
+    </div>
+
+    <!-- ── HTTP ── -->
+    <div id="panel-http" class="panel">
+      <div class="panel-header"><span class="panel-title">HTTP Error Codes</span></div>
+      <div class="code-block"><pre>
+<b>1xx — INFORMATIONAL</b>
+100  Continue                    Server received initial request, continue sending
+101  Switching Protocols         Server accepts protocol switch
+102  Processing                  Server is processing, no response yet
+
+<b>2xx — SUCCESS</b>
+200  OK                          Request successful
+201  Created                     Resource successfully created
+202  Accepted                    Request accepted but not completed
+204  No Content                  Successful, no content to return
+
+<b>3xx — REDIRECTION</b>
+301  Moved Permanently           Resource moved permanently
+302  Found                       Resource temporarily at different URL
+304  Not Modified                Resource not changed since last request
+307  Temporary Redirect          Temporary redirection, same method
+308  Permanent Redirect          Permanent redirection, same method
+
+<b>4xx — CLIENT ERRORS</b>
+400  Bad Request                 Malformed request
+401  Unauthorized                Authentication required
+403  Forbidden                   Request understood, not authorized
+404  Not Found                   Resource not found
+405  Method Not Allowed          Method not allowed for resource
+408  Request Timeout             Server timed out waiting for request
+409  Conflict                    Conflict in request (e.g., duplicate)
+410  Gone                        Resource permanently removed
+413  Payload Too Large           Request size too large
+414  URI Too Long                URI too long
+429  Too Many Requests           Rate limiting in effect
+
+<b>5xx — SERVER ERRORS</b>
+500  Internal Server Error       Generic server error
+501  Not Implemented             Server lacks capability to fulfill
+502  Bad Gateway                 Invalid response from upstream server
+503  Service Unavailable         Server overloaded or under maintenance
+504  Gateway Timeout             Upstream server timed out
+505  HTTP Version Not Supported  HTTP protocol version not supported
+507  Insufficient Storage        Server cannot store required data
+511  Network Auth Required       Authentication to access network needed
+      </pre></div>
+    </div>
+
+    <!-- ── QUERIES ── -->
+    <div id="panel-qa" class="panel">
+      <div class="panel-header"><span class="panel-title">Queries</span></div>
+      <div class="qa-section">
+        <h3>UAT Queries</h3>
+        <div class="elk-list">
+          <div class="elk-item"><a href="https://teams.microsoft.com/l/message/19:0706011bc3c548b498dbedf873bd1233@thread.v2/1748579849711?context=%7B%22contextType%22%3A%22chat%22%7D" target="_blank">trxn exception</a><span class="elk-desc">Error: [Signing info not found for key visa]</span></div>
+        </div>
+      </div>
+      <div class="qa-section">
+        <h3>Prod Issues / Requests</h3>
+        <div class="elk-list">
+          <div class="elk-item"><a href="https://teams.microsoft.com/l/message/19:0706011bc3c548b498dbedf873bd1233@thread.v2/1744683332224?context=%7B%22contextType%22%3A%22chat%22%7D" target="_blank">Retrieve backdated data from PROD DB</a><span class="elk-desc">When Bank requires us to retrieve backdated data from production database</span></div>
+          <div class="elk-item"><a href="https://teams.microsoft.com/l/message/19:0706011bc3c548b498dbedf873bd1233@thread.v2/1775103547883?context=%7B%22contextType%22%3A%22chat%22%7D" target="_blank">Generate data via adhoc SQL</a><span class="elk-desc">When DA asks to generate data via adhoc SQL for multiple banks from PROD DB</span></div>
+        </div>
+      </div>
+      <div class="qa-section">
+        <h3>Nagios Errors</h3>
+        <div class="elk-list">
+          <div class="elk-item"><a href="https://teams.microsoft.com/l/message/19:0706011bc3c548b498dbedf873bd1233@thread.v2/1748945841325?context=%7B%22contextType%22%3A%22chat%22%7D" target="_blank">compare_sv_f5_web</a><span class="elk-desc">When alert is 0.0 — follow solution in link</span></div>
+          <div class="elk-item"><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/data-explorer/discover/#" target="_blank">check_log_level_imsauth_cimb</a><span class="elk-desc">In ELK, on affected time, check what error (500, 503 = usually bank side)</span></div>
+          <div class="elk-item"><a href="https://ap-southeast-1.console.aws.amazon.com/ecs/v2/clusters/fds-fargate-cluster/services/fds-deviceinfo-service/health?region=ap-southeast-1" target="_blank">cloudwatch_check_fds_nginx_error_on_timeout</a><span class="elk-desc">In AWS — check graph in CloudWatch</span></div>
+          <div class="elk-item"><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/data-explorer/discover/#" target="_blank">ubank_api connect failed</a><span class="elk-desc">Ask NOC to telnet and check ELK (PK time — MY is 3hrs ahead)</span></div>
+          <div class="elk-item"><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/data-explorer/discover/#" target="_blank">Check DB Query IMS2CIMBMY</a><span class="elk-desc">Usually trx unimpacted — check OpenSearch, escalate to DBA</span></div>
+          <div class="elk-item"><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/data-explorer/discover/#" target="_blank">IMS2AFFINMY Islamic Visa MyDebit Success Rate</a><span class="elk-desc">Special case — check OpenSearch for last 7 days</span></div>
+          <div class="elk-item"><a href="https://awsinfpcielk1.infinitiumsolutions.com/_dashboards/app/data-explorer/discover/#" target="_blank">IMS2MABMM Count Frictionless</a><span class="elk-desc">Check OpenSearch for last 7 days to compare volume</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── GUIDE ── -->
+    <div id="panel-guide" class="panel">
+      <div class="panel-header"><span class="panel-title">Notes / Guide</span></div>
+      <div class="card-group">
+        <div class="group-label">Documentation</div>
+        <div class="card-grid">
+          <div class="lcard" title="EMVco specs — EMV 3DS Protocol & Core Functions Specification"><a href="EMVCo_3DS_Spec_v220_122018.pdf" target="_blank">📄 EMVco Spec</a></div>
+          <div class="lcard" title="IMS2 — which bank uses which delivery channel"><a href="https://eeft-my.sharepoint.com/:x:/r/personal/dinesh_kanisen_infinitium_com/_layouts/15/Doc.aspx?sourcedoc=%7BF21CCC97-48AC-441A-98DF-A31C70EB8B57%7D" target="_blank">Delivery Channel</a></div>
+          <div class="lcard" title="Check endpoint ACS"><a href="https://eeft.sharepoint.com/:x:/s/PMIndonesia/EVEqA4XrZBlEp-dVaRscLYwBXT7mQ_sUKm0H8_EHp-SUxQ?e=jofDh0" target="_blank">3D2 ACS AREQ URL</a></div>
+          <div class="lcard" title="IMAP response code mapping — SA version"><a href="https://infinitium.atlassian.net/wiki/spaces/SA/pages/2861793281/Authentication+Screen+-+Response+Mapping#2.1-Malaysia" target="_blank">IMAP ResponseCode</a></div>
+          <div class="lcard" title="IMS Authenticator API Specifications (MAP and IMS) — from IMAP devs"><a href="https://eeft.sharepoint.com/:w:/s/SoftwareEngineering_a15ce/IQBaMNw-hlV1QagAJLA5G4-7AcDYx7K3COBASYmTXZo7mjw?e=80nTtt" target="_blank">IMAP API Spec</a></div>
+          <div class="lcard" title="Get latest SRF — check version with AM if needed"><a href="https://eeft.sharepoint.com/sites/DeliveryOffice/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FDeliveryOffice%2FShared%20Documents%2FAccount%20Manager%2FOperational%20%26%20Account%20Management%2FStandard%20Template%2FService%20Request%20Form" target="_blank">Blank SRF Doc</a></div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <button class="btn-primary" onclick="toggleChecklist()">▶ VERSION UPGRADE CHECKLIST</button>
+      <div class="checklist-wrap" id="checklist" style="display:none;margin-top:16px;">
+        <h2>// VERSION UPGRADE CHECKLIST</h2>
+        <div class="chk-section">24hrs Before Activity</div>
+        <ul class="chk-list">
+          <li><input type="checkbox"> Download &amp; move all DB scripts (psql/sql) to DBMgr server <button class="clear-btn" onclick="clearBox(this)">✖</button></li>
+          <li><input type="checkbox"> Check for relevant hotfixes between releases <button class="clear-btn" onclick="clearBox(this)">✖</button></li>
+          <li><input type="checkbox"> Download latest version WAR file <button class="clear-btn" onclick="clearBox(this)">✖</button></li>
+        </ul>
+        <div class="chk-section">1hr Before Activity</div>
+        <ul class="chk-list">
+          <li><input type="checkbox"> Inform via Email/WA group about activity commencement <button class="clear-btn" onclick="clearBox(this)">✖</button></li>
+        </ul>
+        <div class="chk-section">15mins Before Activity</div>
+        <ul class="chk-list">
+          <li><input type="checkbox"> Stop ERM2 service (via NOC if needed) <button class="clear-btn" onclick="clearBox(this)">✖</button></li>
+          <li><input type="checkbox"> Stop CMS &amp; WS (5 min before), stop ACS at exact time (App#C) <button class="clear-btn" onclick="clearBox(this)">✖</button></li>
+          <li><input type="checkbox"> Stop CMS &amp; WS (5 min before), stop ACS at exact time (App#D) <button class="clear-btn" onclick="clearBox(this)">✖</button></li>
+          <li><input type="checkbox"> Ask DBA PIC to stop replication on activity banks <button class="clear-btn" onclick="clearBox(this)">✖</button></li>
+        </ul>
+        <div class="chk-section">During START Activity</div>
+        <ul class="chk-list">
+          <li><input type="checkbox"> DBMgr: Login → PEM → Change group to IMS-MY-Set# → Run SQL scripts <button class="clear-btn" onclick="clearBox(this)">✖</button></li>
+          <li><input type="checkbox"> AppServer: Patch WAR file to all Tomcat instances <button class="clear-btn" onclick="clearBox(this)">✖</button></li>
+          <li><input type="checkbox"> WebServer: Copy new CMS resources → /etc/nginx/... → Restart nginx <button class="clear-btn" onclick="clearBox(this)">✖</button></li>
+          <li><input type="checkbox"> Bring up services one by one, check logs &amp; localhost page <button class="clear-btn" onclick="clearBox(this)">✖</button></li>
+          <li><input type="checkbox"> Verify transaction processing <button class="clear-btn" onclick="clearBox(this)">✖</button></li>
+        </ul>
+        <div class="chk-section">During END Activity</div>
+        <ul class="chk-list">
+          <li><input type="checkbox"> Send completion email/WA with trx &amp; CMS screenshot <button class="clear-btn" onclick="clearBox(this)">✖</button></li>
+          <li><input type="checkbox"> Patch WAR file (and hotfixes) to DR Tomcat instances <button class="clear-btn" onclick="clearBox(this)">✖</button></li>
+          <li><input type="checkbox"> WebServer: Copy new CMS resources → DR nginx → Restart nginx <button class="clear-btn" onclick="clearBox(this)">✖</button></li>
+        </ul>
+        <div class="chk-section">DR Patch</div>
+        <ul class="chk-list">
+          <li><input type="checkbox"> Apply DR patching steps as required <button class="clear-btn" onclick="clearBox(this)">✖</button></li>
+        </ul>
+        <button class="btn-secondary" onclick="clearAll()">CLEAR ALL</button>
+      </div>
+    </div>
+
+    <!-- ── TOOLS ── -->
+    <div id="panel-tool" class="panel">
+      <div class="panel-header"><span class="panel-title">Tools</span></div>
+      <div class="card-grid">
+        <div class="lcard"><a href="https://certlogik.com/decoder/" target="_blank">CSR Decoder</a></div>
+        <div class="lcard" title="Generating and managing cryptographic keys"><a href="https://emvlab.org/keyshares/?combined=35E9619A6328B6B8E432D12E0FA2516671743706BC96CFD309184F856888C4F9&numcomp=three&parity=ignore&action=Generate+256+bit" target="_blank">Keyshare Generator</a></div>
+        <div class="lcard" title="Apply virtual IP (prod)"><a href="https://ipam.infinitium.com/request_ip/" target="_blank">IPAM</a></div>
+        <div class="lcard" style="position:relative;">
+          <a href="https://www.digicert.com/account/login.php" target="_blank">DigiCert</a>
+          <div class="hover-note">u: support@infinitium.com<br>p: Digicert@2025!!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── WELCOME (default) ── -->
+    <div id="panel-welcome" class="panel active">
+      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:60vh;text-align:center;gap:16px;">
+        <div style="font-family:var(--mono);font-size:48px;color:var(--accent);text-shadow:var(--glow-strong);letter-spacing:0.1em;">POWERHOUSE</div>
+        <div style="font-family:var(--mono);font-size:12px;color:var(--text-dim);letter-spacing:0.3em;">INTERNAL OPERATIONS DASHBOARD</div>
+        <div style="width:60px;height:1px;background:var(--border);margin:8px 0;"></div>
+        <div style="font-size:13px;color:var(--text-muted);">Select a section from the sidebar to begin.</div>
+      </div>
+    </div>
+
+  </div><!-- close .content -->
+</div><!-- close .main -->
+
+<div class="hover-reveal">// <span class="hidden-text">dinesh.K ©</span></div>
+
+<script>
+  // ── DateTime ──
+  function updateDateTime() {
+    const now = new Date();
+    const opts = { weekday:'short', year:'numeric', month:'short', day:'numeric' };
+    document.getElementById('datetime').textContent =
+      now.toLocaleDateString(undefined, opts) + '  ·  ' + now.toLocaleTimeString();
+  }
+  setInterval(updateDateTime, 1000);
+  updateDateTime();
+
+  // ── Panel Navigation ──
+  function showPanel(id, btn) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    const panel = document.getElementById('panel-' + id);
+    if (panel) panel.classList.add('active');
+    if (btn) btn.classList.add('active');
+  }
+
+  // ── Inner Tabs ──
+  function showInner(groupId, targetId, btn) {
+    const group = document.getElementById('panel-' + groupId) ||
+                  document.getElementById(groupId);
+    if (!group) return;
+    group.querySelectorAll('.inner-panel').forEach(p => p.classList.remove('active'));
+    group.querySelectorAll('.inner-tab').forEach(b => b.classList.remove('active'));
+    const target = document.getElementById(targetId);
+    if (target) target.classList.add('active');
+    if (btn) btn.classList.add('active');
+  }
+
+  // ── Multi-tab opener ──
+  function openMultipleTabs(urls) {
+    urls.forEach(url => window.open(url, '_blank'));
+  }
+
+  // ── Open all PROD links ──
+  function openAllProd() {
+    document.querySelectorAll('#panel-prod a[href]').forEach(a => {
+      window.open(a.href, '_blank');
+    });
+  }
+
+  // ── Cert URL Builder ──
+  function openCustomUrl() {
+    const host = document.getElementById('hostInput').value.trim();
+    const port = document.getElementById('portSelect').value;
+    if (!host) { alert('Please enter a host'); return; }
+    window.open('https://' + host + ':' + port + '/', '_blank');
+  }
+
+  // ── Cert Guide Toggle ──
+  function toggleGuide() {
+    const p = document.getElementById('certGuide');
+    p.style.display = p.style.display === 'block' ? 'none' : 'block';
+  }
+
+  // ── Checklist ──
+  function toggleChecklist() {
+    const c = document.getElementById('checklist');
+    c.style.display = c.style.display === 'block' ? 'none' : 'block';
+  }
+  function clearBox(btn) {
+    btn.parentElement.querySelector('input[type="checkbox"]').checked = false;
+  }
+  function clearAll() {
+    document.querySelectorAll('#checklist input[type="checkbox"]').forEach(cb => cb.checked = false);
+  }
+
+  <!-- // ── Search ── -->
+  <!-- function filterPage() { -->
+    <!-- const q = document.getElementById('searchBox').value.toLowerCase().trim(); -->
+    <!-- if (!q) { -->
+      <!-- document.querySelectorAll('.lcard, .lcard-multi, .elk-item').forEach(el => el.style.display = ''); -->
+      <!-- return; -->
+    <!-- } -->
+    <!-- document.querySelectorAll('.lcard, .lcard-multi, .elk-item').forEach(el => { -->
+      <!-- el.style.display = el.textContent.toLowerCase().includes(q) ? '' : 'none'; -->
+    <!-- }); -->
+  <!-- } -->
+  
+function filterPage() {
+  const q = document.getElementById('searchBox').value.toLowerCase().trim();
+
+  const panels = document.querySelectorAll('.panel');
+  const groups = document.querySelectorAll('.card-group, .qa-section');
+  const items = document.querySelectorAll('.lcard, .lcard-multi, .elk-item');
+
+  if (!q) {
+    panels.forEach(p => p.classList.remove('active'));
+    document.querySelector('.nav-btn.active')?.click();
+
+    items.forEach(el => el.style.display = '');
+    groups.forEach(el => el.style.display = '');
+    panels.forEach(el => el.style.display = '');
+    return;
+  }
+
+  // Show all panels
+  panels.forEach(panel => {
+    panel.classList.add('active');
+    panel.style.display = '';
+  });
+
+  // Filter items
+  items.forEach(el => {
+    const match = el.textContent.toLowerCase().includes(q);
+    el.style.display = match ? '' : 'none';
+  });
+
+  // Hide empty groups (NOW includes qa-section)
+  groups.forEach(group => {
+    const visibleItems = group.querySelectorAll(
+      '.lcard:not([style*="display: none"]), .lcard-multi:not([style*="display: none"]), .elk-item:not([style*="display: none"])'
+    );
+    group.style.display = visibleItems.length > 0 ? '' : 'none';
+  });
+
+  // Hide empty panels
+  panels.forEach(panel => {
+    const visibleGroups = panel.querySelectorAll(
+      '.card-group:not([style*="display: none"]), .qa-section:not([style*="display: none"])'
+    );
+    panel.style.display = visibleGroups.length > 0 ? '' : 'none';
+  });
+}
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      document.getElementById('searchBox').value = '';
+      filterPage();
+    }
+  });
+</script>
+</body>
+</html>
